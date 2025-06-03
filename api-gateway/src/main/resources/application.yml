@@ -1,0 +1,11 @@
+
+spring:
+  config:
+    import:
+      - configserver:${CONFIG_SERVER_URI}
+      - optional:file:.env[.properties]
+  application:
+    name: api-gateway
+
+server:
+  port: ${API_GATEWAY_PORT}

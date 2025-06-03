@@ -1,0 +1,16 @@
+
+spring:
+  application:
+    name: eureka-server
+  config:
+    import: optional:file:.env[.properties]
+
+server:
+  port: ${SERVER_PORT}
+
+eureka:
+  client:
+    register-with-eureka: ${EUREKA_REGISTER}
+    fetch-registry: ${EUREKA_FETCH}
+  instance:
+    lease-renewal-interval-in-seconds: ${EUREKA_RENEWAL_INTERVAL}
