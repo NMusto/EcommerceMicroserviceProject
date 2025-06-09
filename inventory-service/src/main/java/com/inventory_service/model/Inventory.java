@@ -1,4 +1,4 @@
-package com.product_service.model;
+package com.inventory_service.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -8,20 +8,17 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
-@Getter @Setter
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@Document(collection = "products")
-public class Product {
+@Document(collection = "inventory")
+public class Inventory {
 
     @Id
     private String id;
 
-    private String name;
-    private String description;
-
-    @Field(name = "unit_price")
-    private Double unitPrice;
-
-    private String category;
+    @Field(name = "product_id")
+    private String productId;
+    private int quantity;
 }

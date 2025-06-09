@@ -1,0 +1,15 @@
+
+spring:
+  config:
+    import:
+      - configserver:${CONFIG_SERVER_URI:http://localhost:8888}
+      - optional:file:.env[.properties]
+  application:
+    name: inventory-service
+
+  data:
+    mongodb:
+      uri: mongodb://${MONGO_USERNAME}:${MONGO_PASSWORD}@${MONGO_HOST}:${MONGO_PORT}/${MONGO_DB}
+
+server:
+  port: ${INVENTORY_PORT}

@@ -15,5 +15,6 @@ spring:
     hibernate:
       ddl-auto: 'create-drop'
 
+
 server:
   port: ${ORDER_PORT}
