@@ -20,5 +20,5 @@ public class Inventory {
 
     @Field(name = "product_id")
     private String productId;
-    private int quantity;
+    private Integer stock;
 }
