@@ -2,6 +2,9 @@ package com.product_service.service;
 
 import com.product_service.dto.ProductInDTO;
 import com.product_service.dto.ProductOutDTO;
+import com.product_service.mapper.ProductInDTOToProduct;
+import com.product_service.mapper.ProductToProductOutDTO;
+import com.product_service.model.Product;
 import com.product_service.repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -13,11 +16,19 @@ import java.util.List;
 public class ProductService implements IProductService{
 
     private final ProductRepository productRepository;
+    private final ProductInDTOToProduct productInDTOToProduct;
+    private final ProductToProductOutDTO productToProductOutDTO;
 
 
     @Override
     public ProductOutDTO createProduct(ProductInDTO productInDTO) {
-        return null;
+        if (productRepository.existsByName(productInDTO.getName())) {
+            throw new RuntimeException("Product with name '" + productInDTO.getName() + "' already exists");
+        }
+
+        Product product = productInDTOToProduct.map(productInDTO);
+        ProductOutDTO productOutDTO = productToProductOutDTO.map(product);
+        return productOutDTO;
     }
 
     @Override
