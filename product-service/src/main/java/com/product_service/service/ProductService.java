@@ -76,7 +76,7 @@ public class ProductService implements IProductService{
     public String deleteProduct(String productId) {
 
         if (!productRepository.existsById(productId)) {
-            throw new RuntimeException("Product not found with id: " + productId);
+            throw new ProductNotFoundException("Product not found with id: " + productId);
         }
         productRepository.deleteById(productId);
         return "Product with ID " + productId + " was successfully deleted";
