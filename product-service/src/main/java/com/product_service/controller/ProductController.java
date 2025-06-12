@@ -28,7 +28,7 @@ public class ProductController {
     }
 
     @GetMapping("/{productId}")
-    public ResponseEntity<ProductOutDTO> findProductById(@PathVariable String productId) {
+    public ResponseEntity<ProductOutDTO> getProductById(@PathVariable String productId) {
         ProductOutDTO productOutDTO = productService.getProductById(productId);
         return ResponseEntity.status(HttpStatus.OK).body(productOutDTO);
     }

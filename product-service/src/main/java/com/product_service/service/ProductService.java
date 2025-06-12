@@ -1,5 +1,6 @@
 package com.product_service.service;
 
+import com.product_service.dto.InventoryDTO;
 import com.product_service.dto.ProductCreateDTO;
 import com.product_service.dto.ProductUpdateDTO;
 import com.product_service.dto.ProductOutDTO;
@@ -9,13 +10,13 @@ import com.product_service.kafka.producer.KafkaProducer;
 import com.product_service.mapper.ProductCreateDTOToProduct;
 import com.product_service.mapper.ProductToProductOutDTO;
 import com.product_service.model.Product;
+import com.product_service.client.IInventoryApi;
 import com.product_service.repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -25,6 +26,7 @@ public class ProductService implements IProductService{
     private final ProductCreateDTOToProduct productCreateDTOToProduct;
     private final ProductToProductOutDTO productToProductOutDTO;
     private final KafkaProducer kafkaProducer;
+    private final IInventoryApi inventoryApi;
 
 
     @Override
@@ -66,9 +68,11 @@ public class ProductService implements IProductService{
 
         ProductOutDTO productOutDTO = productToProductOutDTO.map(product);
 
+        InventoryDTO inventoryDTO = inventoryApi.getInventoryByProductId(productId);    // Fallback desde IInventoryApi, (devuelve un inventoryDTO)
 
+        productOutDTO.setStock(inventoryDTO.getStock());
 
-        return ;
+        return productOutDTO;
     }
 
     @Override
