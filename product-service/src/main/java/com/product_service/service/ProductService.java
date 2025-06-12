@@ -1,10 +1,12 @@
 package com.product_service.service;
 
-import com.product_service.dto.ProductInDTO;
+import com.product_service.dto.ProductCreateDTO;
+import com.product_service.dto.ProductUpdateDTO;
 import com.product_service.dto.ProductOutDTO;
+import com.product_service.exception.ProductNotFoundException;
 import com.product_service.kafka.event.StockEvent;
 import com.product_service.kafka.producer.KafkaProducer;
-import com.product_service.mapper.ProductInDTOToProduct;
+import com.product_service.mapper.ProductCreateDTOToProduct;
 import com.product_service.mapper.ProductToProductOutDTO;
 import com.product_service.model.Product;
 import com.product_service.repository.ProductRepository;
@@ -20,33 +22,35 @@ import java.util.stream.Collectors;
 public class ProductService implements IProductService{
 
     private final ProductRepository productRepository;
-    private final ProductInDTOToProduct productInDTOToProduct;
+    private final ProductCreateDTOToProduct productCreateDTOToProduct;
     private final ProductToProductOutDTO productToProductOutDTO;
     private final KafkaProducer kafkaProducer;
 
 
     @Override
-    public ProductOutDTO createProduct(ProductInDTO productInDTO) {
+    public ProductOutDTO createProduct(ProductCreateDTO productCreateDTO) {
 
-        Product product = productInDTOToProduct.map(productInDTO);
+        Product product = productCreateDTOToProduct.map(productCreateDTO);
         Product savedProduct = productRepository.save(product);
 
-        this.updateStock(savedProduct.getId(), productInDTO.getStock());
+        this.updateStock(savedProduct.getId(), productCreateDTO.getStock());
 
         return productToProductOutDTO.map(product);
     }
 
     @Override
-    public ProductOutDTO updateProduct(String productId, ProductInDTO productInDTO) {
+    public ProductOutDTO updateProduct(String productId, ProductUpdateDTO productUpdateDTO) {
 
         Product product = this.getProduct(productId);
 
-        Optional.ofNullable(productInDTO.getName()).ifPresent(product::setName);
-        Optional.ofNullable(productInDTO.getDescription()).ifPresent(product::setDescription);
-        Optional.ofNullable(productInDTO.getCategory()).ifPresent(product::setCategory);
-        Optional.ofNullable(productInDTO.getUnitPrice()).ifPresent(product::setUnitPrice);
+        Optional.ofNullable(productUpdateDTO.getName()).ifPresent(product::setName);
+        Optional.ofNullable(productUpdateDTO.getDescription()).ifPresent(product::setDescription);
+        Optional.ofNullable(productUpdateDTO.getCategory()).ifPresent(product::setCategory);
+        Optional.ofNullable(productUpdateDTO.getUnitPrice()).ifPresent(product::setUnitPrice);
 
-        this.updateStock(productId, productInDTO.getStock());
+        if (productUpdateDTO.getStock() != null) {
+            this.updateStock(productId, productUpdateDTO.getStock());
+        }
 
         productRepository.save(product);
         return productToProductOutDTO.map(product);
@@ -83,7 +87,7 @@ public class ProductService implements IProductService{
     public Product getProduct(String productId) {
 
         return productRepository.findById(productId)
-                .orElseThrow(() -> new RuntimeException("Product not found with id: " + productId));
+                .orElseThrow(() -> new ProductNotFoundException("Product not found with id: " + productId));
     }
 
     @Override

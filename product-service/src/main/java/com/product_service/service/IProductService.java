@@ -1,17 +1,17 @@
 package com.product_service.service;
 
-import com.product_service.dto.ProductInDTO;
+import com.product_service.dto.ProductCreateDTO;
+import com.product_service.dto.ProductUpdateDTO;
 import com.product_service.dto.ProductOutDTO;
-import com.product_service.kafka.event.StockEvent;
 import com.product_service.model.Product;
 
 import java.util.List;
 
 public interface IProductService {
 
-    ProductOutDTO createProduct(ProductInDTO productInDTO);
+    ProductOutDTO createProduct(ProductCreateDTO ProductCreateDTO);
 
-    ProductOutDTO updateProduct(String productId, ProductInDTO productInDTO);
+    ProductOutDTO updateProduct(String productId, ProductUpdateDTO productUpdateDTO);
 
     ProductOutDTO getProductById(String productId);
 
