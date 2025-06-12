@@ -11,11 +11,11 @@ public interface IProductService {
 
     ProductOutDTO createProduct(ProductCreateDTO ProductCreateDTO);
 
-    ProductOutDTO updateProduct(String productId, ProductUpdateDTO productUpdateDTO);
+    String updateProduct(String productId, ProductUpdateDTO productUpdateDTO);
 
     ProductOutDTO getProductById(String productId);
 
-    List<ProductOutDTO> getAllProducts();
+    List<Product> getAllProducts();
 
     String deleteProduct(String productId);
 

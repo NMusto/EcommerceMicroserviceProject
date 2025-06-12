@@ -24,7 +24,7 @@ public class ProductCreateDTO {
     @NotBlank(message = "Category is required")
     private String category;
 
-    @NotNull(message = "Price is required")
+    @NotNull(message = "Stock is required")
     @Positive(message = "Stock must be greater than 0")
     private Integer stock;
 }

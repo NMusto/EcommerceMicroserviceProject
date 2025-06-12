@@ -35,11 +35,14 @@ public class ProductService implements IProductService{
 
         this.updateStock(savedProduct.getId(), productCreateDTO.getStock());
 
-        return productToProductOutDTO.map(product);
+        ProductOutDTO productOutDTO = productToProductOutDTO.map(product);
+        productOutDTO.setStock(productCreateDTO.getStock());
+
+        return productOutDTO;
     }
 
     @Override
-    public ProductOutDTO updateProduct(String productId, ProductUpdateDTO productUpdateDTO) {
+    public String updateProduct(String productId, ProductUpdateDTO productUpdateDTO) {
 
         Product product = this.getProduct(productId);
 
@@ -53,7 +56,7 @@ public class ProductService implements IProductService{
         }
 
         productRepository.save(product);
-        return productToProductOutDTO.map(product);
+        return "Product with ID " + productId + " was successfully updated!";
     }
 
     @Override
@@ -61,15 +64,17 @@ public class ProductService implements IProductService{
 
         Product product = this.getProduct(productId);
 
-        return productToProductOutDTO.map(product);
+        ProductOutDTO productOutDTO = productToProductOutDTO.map(product);
+
+
+
+        return ;
     }
 
     @Override
-    public List<ProductOutDTO> getAllProducts() {
+    public List<Product> getAllProducts() {
 
-        return productRepository.findAll().stream()
-                .map(productToProductOutDTO::map)
-                .collect(Collectors.toList());
+        return productRepository.findAll();
     }
 
     @Override

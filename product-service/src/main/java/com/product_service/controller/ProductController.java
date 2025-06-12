@@ -3,6 +3,7 @@ package com.product_service.controller;
 import com.product_service.dto.ProductCreateDTO;
 import com.product_service.dto.ProductOutDTO;
 import com.product_service.dto.ProductUpdateDTO;
+import com.product_service.model.Product;
 import com.product_service.service.ProductService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -33,16 +34,16 @@ public class ProductController {
     }
 
     @GetMapping
-    public ResponseEntity<List<ProductOutDTO>> getAllProducts() {
-        List<ProductOutDTO> productOutDTOList = productService.getAllProducts();
-        return ResponseEntity.status(HttpStatus.OK).body(productOutDTOList);
+    public ResponseEntity<List<Product>> getAllProducts() {
+        List<Product> products = productService.getAllProducts();
+        return ResponseEntity.status(HttpStatus.OK).body(products);
     }
 
     @PatchMapping("/{productId}")
-    public ResponseEntity<ProductOutDTO> updateProduct(@PathVariable String productId,
+    public ResponseEntity<String> updateProduct(@PathVariable String productId,
                                                        @RequestBody ProductUpdateDTO productUpdateDTO) {
-        ProductOutDTO productOutDTO = productService.updateProduct(productId, productUpdateDTO);
-        return ResponseEntity.status(HttpStatus.OK).body(productOutDTO);
+        String response = productService.updateProduct(productId, productUpdateDTO);
+        return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
     @DeleteMapping("/{productId}")
