@@ -19,6 +19,9 @@ spring:
           json:
             trusted:
               packages: "*"
+            value:
+              default:
+                type: com.inventory_service.kafka.event
 
 eureka:
   client:
