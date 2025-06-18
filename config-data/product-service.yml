@@ -12,6 +12,9 @@ spring:
     properties:
       spring:
         json:
+          add:
+            type:
+              headers: false
           add-type-info: false
 
 eureka:
