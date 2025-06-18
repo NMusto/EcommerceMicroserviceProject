@@ -34,7 +34,7 @@ public class KafkaConsumer {
                             newInventory.setProductId(stockEvent.getProductId());
                             newInventory.setStock(stockEvent.getStock());
                             inventoryRepository.save(newInventory);
-                            log.info("New inventary created for product ID: {}", stockEvent.getProductId());
+                            log.info("New inventory created for product ID: {}", stockEvent.getProductId());
                         }
                 );
     }
