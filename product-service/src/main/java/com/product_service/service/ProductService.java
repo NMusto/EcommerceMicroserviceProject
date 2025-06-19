@@ -13,6 +13,9 @@ import com.product_service.model.Product;
 import com.product_service.client.IInventoryApi;
 import com.product_service.repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -44,6 +47,7 @@ public class ProductService implements IProductService{
     }
 
     @Override
+    //@CachePut(value = "products", key = "#productId")
     public String updateProduct(String productId, ProductUpdateDTO productUpdateDTO) {
 
         Product product = this.getProduct(productId);
@@ -62,6 +66,7 @@ public class ProductService implements IProductService{
     }
 
     @Override
+    //@Cacheable(value = "products", key = "#productId", unless = "#result == null")
     public ProductOutDTO getProductById(String productId) {
 
         Product product = this.getProduct(productId);
@@ -82,6 +87,7 @@ public class ProductService implements IProductService{
     }
 
     @Override
+    //@CacheEvict(value = "products", key = "#productId")
     public String deleteProduct(String productId) {
 
         if (!productRepository.existsById(productId)) {

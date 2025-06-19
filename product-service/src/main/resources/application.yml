@@ -10,6 +10,13 @@ spring:
   data:
     mongodb:
       uri: mongodb://${MONGO_USERNAME}:${MONGO_PASSWORD}@${MONGO_HOST}:${MONGO_PORT}/${MONGO_DB}?authSource=admin
+    #redis:
+      #host: ${REDIS_HOST}
+      #port: ${REDIS_PORT}
+
+  #cache:
+    #redis:
+      #time-to-live: 600000  # 10 minutes
 
 server:
   port: ${PRODUCT_PORT}
