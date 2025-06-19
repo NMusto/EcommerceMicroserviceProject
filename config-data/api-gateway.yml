@@ -10,6 +10,11 @@ spring:
           enabled: true
           lower-case-service-id: true
 
+eureka:
+  client:
+    service-url:
+      defaultZone: ${EUREKA_URI}
+
 management:
   endpoints:
     web:
