@@ -25,6 +25,8 @@ public class CartItem {
     @Column(name = "product_id")
     private Long productId;
 
+    private String description;
+
     private Integer quantity;
 
     @Column(name = "unit_price")
