@@ -3,23 +3,28 @@ package com.cart_service.service;
 import com.cart_service.dto.CartOutDto;
 import com.cart_service.dto.CartiInDto;
 import com.cart_service.dto.UpdateCartDto;
+import com.cart_service.mapper.CartMapper;
 import com.cart_service.repository.ICartItemRepository;
 import com.cart_service.repository.ICartRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class CartService implements ICartService{
 
     private final ICartRepository cartRepository;
+    private final CartMapper cartMapper;
 
 
     @Override
     public List<CartOutDto> getAllCarts() {
-        return null;
+        return cartRepository.findAll().stream()
+                .map(cartMapper::toCartOutDto)
+                .collect(Collectors.toList());
     }
 
     @Override
