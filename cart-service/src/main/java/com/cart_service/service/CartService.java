@@ -53,6 +53,9 @@ public class CartService implements ICartService{
 
     @Override
     public void deleteCart(Long cartId) {
-
+        if (!cartRepository.existsById(cartId)) {
+            throw new RuntimeException("Cart not found with ID: " + cartId);
+        }
+        cartRepository.deleteById(cartId);
     }
 }
