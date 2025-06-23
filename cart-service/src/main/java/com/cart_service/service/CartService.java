@@ -4,6 +4,7 @@ import com.cart_service.dto.CartOutDto;
 import com.cart_service.dto.CartiInDto;
 import com.cart_service.dto.UpdateCartDto;
 import com.cart_service.mapper.CartMapper;
+import com.cart_service.model.Cart;
 import com.cart_service.repository.ICartItemRepository;
 import com.cart_service.repository.ICartRepository;
 import lombok.RequiredArgsConstructor;
@@ -29,7 +30,10 @@ public class CartService implements ICartService{
 
     @Override
     public CartOutDto getCartById(Long cartId) {
-        return null;
+        Cart cart = cartRepository.findById(cartId)
+                .orElseThrow(() -> new RuntimeException("Cart not found with ID: " + cartId));
+
+        return cartMapper.toCartOutDto(cart);
     }
 
     @Override
