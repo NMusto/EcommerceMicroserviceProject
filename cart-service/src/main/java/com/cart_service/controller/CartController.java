@@ -1,6 +1,6 @@
 package com.cart_service.controller;
 
-import com.cart_service.service.ICartService;
+import com.cart_service.service.cartService.ICartService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;

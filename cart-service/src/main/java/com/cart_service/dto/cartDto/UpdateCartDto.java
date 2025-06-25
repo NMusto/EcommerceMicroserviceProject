@@ -1,18 +1,14 @@
-package com.cart_service.dto;
+package com.cart_service.dto.cartDto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.List;
-
-@Getter @Setter
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class CartOutDto {
-    private Long id;
-    private Long userId;
+public class UpdateCartDto {
     private Double totalAmount;
-    private List<CartItemOutDto> items;
 }

@@ -1,6 +1,6 @@
-package com.cart_service.service;
+package com.cart_service.service.cartItemService;
 
-import com.cart_service.dto.CartItemInDto;
+import com.cart_service.dto.cartItemDto.CartItemInDto;
 import com.cart_service.model.CartItem;
 
 import java.util.List;

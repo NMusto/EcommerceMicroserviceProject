@@ -1,11 +1,10 @@
-package com.cart_service.service;
+package com.cart_service.service.cartService;
 
-import com.cart_service.dto.CartOutDto;
-import com.cart_service.dto.CartiInDto;
-import com.cart_service.dto.UpdateCartDto;
+import com.cart_service.dto.cartDto.CartOutDto;
+import com.cart_service.dto.cartDto.CartiInDto;
+import com.cart_service.dto.cartDto.UpdateCartDto;
 import com.cart_service.mapper.CartMapper;
 import com.cart_service.model.Cart;
-import com.cart_service.repository.ICartItemRepository;
 import com.cart_service.repository.ICartRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -15,7 +14,7 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
-public class CartService implements ICartService{
+public class CartService implements ICartService {
 
     private final ICartRepository cartRepository;
     private final CartMapper cartMapper;
@@ -30,15 +29,15 @@ public class CartService implements ICartService{
 
     @Override
     public CartOutDto getCartById(Long cartId) {
-        Cart cart = cartRepository.findById(cartId)
-                .orElseThrow(() -> new RuntimeException("Cart not found with ID: " + cartId));
-
+        Cart cart = this.getCart(cartId);
         return cartMapper.toCartOutDto(cart);
     }
 
     @Override
     public CartOutDto getCartByUserId(Long userId) {
-        return null;
+        Cart cart = cartRepository.findByUserId(userId)
+                .orElseThrow(() -> new RuntimeException("User ID: " + userId + " not found!"));
+        return cartMapper.toCartOutDto(cart);
     }
 
     @Override
@@ -58,4 +57,11 @@ public class CartService implements ICartService{
         }
         cartRepository.deleteById(cartId);
     }
+
+    @Override
+    public Cart getCart(Long cartId) {
+        return cartRepository.findById(cartId)
+                .orElseThrow(() -> new RuntimeException("Cart not found with ID: " + cartId));
+    }
+
 }

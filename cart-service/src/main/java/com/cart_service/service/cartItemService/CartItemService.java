@@ -1,6 +1,6 @@
-package com.cart_service.service;
+package com.cart_service.service.cartItemService;
 
-import com.cart_service.dto.CartItemInDto;
+import com.cart_service.dto.cartItemDto.CartItemInDto;
 import com.cart_service.model.CartItem;
 import com.cart_service.repository.ICartItemRepository;
 import lombok.RequiredArgsConstructor;
@@ -10,7 +10,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class CartItemService implements ICartItemService{
+public class CartItemService implements ICartItemService {
 
     private final ICartItemRepository cartItemRepository;
 

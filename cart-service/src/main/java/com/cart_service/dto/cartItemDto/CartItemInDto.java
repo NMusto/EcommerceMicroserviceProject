@@ -1,4 +1,4 @@
-package com.cart_service.dto;
+package com.cart_service.dto.cartItemDto;
 
 import jakarta.persistence.Column;
 import lombok.AllArgsConstructor;

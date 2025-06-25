@@ -1,11 +1,9 @@
-package com.cart_service.service;
+package com.cart_service.service.cartService;
 
-import com.cart_service.dto.CartItemInDto;
-import com.cart_service.dto.CartOutDto;
-import com.cart_service.dto.CartiInDto;
-import com.cart_service.dto.UpdateCartDto;
+import com.cart_service.dto.cartDto.CartOutDto;
+import com.cart_service.dto.cartDto.CartiInDto;
+import com.cart_service.dto.cartDto.UpdateCartDto;
 import com.cart_service.model.Cart;
-import com.cart_service.model.CartItem;
 
 import java.util.List;
 
@@ -17,5 +15,6 @@ public interface ICartService {
     CartOutDto createCart(CartiInDto cartiInDto);
     CartOutDto updateCart(Long cartId, UpdateCartDto updateCartDto);
     void deleteCart(Long cartId);
+    Cart getCart(Long cartId);
 
 }
