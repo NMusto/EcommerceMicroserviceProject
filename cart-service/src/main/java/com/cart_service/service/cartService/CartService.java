@@ -9,6 +9,7 @@ import com.cart_service.repository.ICartRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -42,7 +43,15 @@ public class CartService implements ICartService {
 
     @Override
     public CartOutDto createCart(CartiInDto cartiInDto) {
-        return null;
+        Cart cart = cartRepository.findByUserId(cartiInDto.getUserId())
+                .orElseGet(() -> cartRepository.save(
+                        Cart.builder()
+                                .userId(cartiInDto.getUserId())
+                                .items(new ArrayList<>())
+                                .totalAmount(0.0)
+                                .build()
+                ));
+        return cartMapper.toCartOutDto(cart);
     }
 
     @Override
