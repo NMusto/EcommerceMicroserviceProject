@@ -73,7 +73,8 @@ public class CartItemService implements ICartItemService {
 
     @Override
     public CartItem getItemById(Long itemId) {
-        return null;
+        return cartItemRepository.findById(itemId)
+                .orElseThrow(() -> new RuntimeException("CartItem not found"));
     }
 
     @Override
