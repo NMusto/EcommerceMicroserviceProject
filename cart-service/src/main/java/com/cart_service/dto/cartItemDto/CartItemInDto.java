@@ -12,7 +12,6 @@ import lombok.Setter;
 @NoArgsConstructor
 public class CartItemInDto {
 
-    private Long userId;
     private Long productId;
     private Integer quantity;
 }
