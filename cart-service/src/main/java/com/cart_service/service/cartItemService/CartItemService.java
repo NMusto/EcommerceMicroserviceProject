@@ -9,6 +9,7 @@ import com.cart_service.repository.ICartItemRepository;
 import com.cart_service.repository.ICartRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -22,6 +23,7 @@ public class CartItemService implements ICartItemService {
 
 
     @Override
+    @Transactional
     public CartItem addItemToCart(Long cartId, CartItemInDto cartItemInDto) {
         Cart cart = cartRepository.findById(cartId)
                 .orElseThrow(() -> new RuntimeException("Cart not found"));
@@ -48,8 +50,20 @@ public class CartItemService implements ICartItemService {
     }
 
     @Override
+    @Transactional
     public CartItem updateItem(Long itemId, Integer newQuantity) {
-        return null;
+        CartItem item = cartItemRepository.findById(itemId)
+                .orElseThrow(() -> new RuntimeException("CartItem not found"));
+
+        item.setQuantity(newQuantity);
+        item.setSubtotal(item.getUnitPrice() * newQuantity);
+
+        Cart cart = item.getCart();
+        Double total = this.recalculateCartTotalAmount(item.getCart());
+        cart.setTotalAmount(total);
+        cartRepository.save(cart);
+
+        return cartItemRepository.save(item);
     }
 
     @Override
