@@ -47,7 +47,11 @@ public class CartService implements ICartService {
 
     @Override
     public CartOutDto updateCart(Long cartId, UpdateCartDto updateCartDto) {
-        return null;
+        Cart cart = this.getCart(cartId);
+        cart.setTotalAmount(updateCartDto.getTotalAmount());
+        cartRepository.save(cart);
+
+        return cartMapper.toCartOutDto(cart);
     }
 
     @Override
