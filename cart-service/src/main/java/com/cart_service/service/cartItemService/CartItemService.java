@@ -67,8 +67,18 @@ public class CartItemService implements ICartItemService {
     }
 
     @Override
+    @Transactional
     public void deleteItemById(Long itemId) {
+        CartItem item = cartItemRepository.findById(itemId)
+                .orElseThrow(() -> new RuntimeException("CartItem not found"));
 
+        Cart cart = item.getCart();
+        double total = this.recalculateCartTotalAmount(cart);
+        cart.setTotalAmount(total);
+
+        cart.getItems().remove(item);   // orphanRemoval = true
+
+        cartRepository.save(cart);
     }
 
     @Override
