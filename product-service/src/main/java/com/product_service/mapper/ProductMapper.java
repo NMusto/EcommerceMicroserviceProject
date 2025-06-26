@@ -1,5 +1,5 @@
 package com.product_service.mapper;
 
-public interface IMapper<I,O> {
+public interface ProductMapper<I,O> {
     public O map(I in);
 }

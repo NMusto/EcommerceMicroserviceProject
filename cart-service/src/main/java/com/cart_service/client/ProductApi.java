@@ -1,6 +1,6 @@
 package com.cart_service.client;
 
-import com.cart_service.client.dto.ProductClientResponse;
+import com.cart_service.client.dto.ProductApiResponse;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -9,5 +9,5 @@ import org.springframework.web.bind.annotation.PathVariable;
 public interface ProductApi {
 
     @GetMapping("/api/product/{productId}")
-    public ProductClientResponse getProductById(@PathVariable("productId") Long productId);
+    public ProductApiResponse getProductById(@PathVariable("productId") Long productId);
 }

@@ -1,10 +1,11 @@
 package com.product_service.controller;
 
-import com.product_service.dto.ProductCreateDTO;
-import com.product_service.dto.ProductOutDTO;
-import com.product_service.dto.ProductUpdateDTO;
-import com.product_service.model.Product;
+import com.product_service.dto.ProductRequest;
+import com.product_service.dto.ProductResponse;
+import com.product_service.dto.ProductUpdateRequest;
+import com.product_service.entity.Product;
 import com.product_service.service.ProductService;
+import com.product_service.service.ProductServiceImpl;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -22,15 +23,15 @@ public class ProductController {
 
 
     @PostMapping
-    public ResponseEntity<ProductOutDTO> createProduct(@Valid @RequestBody ProductCreateDTO productCreateDTO) {
-        ProductOutDTO createdProduct = productService.createProduct(productCreateDTO);
+    public ResponseEntity<ProductResponse> createProduct(@Valid @RequestBody ProductRequest productRequest) {
+        ProductResponse createdProduct = productService.createProduct(productRequest);
         return ResponseEntity.status(HttpStatus.CREATED).body(createdProduct);
     }
 
     @GetMapping("/{productId}")
-    public ResponseEntity<ProductOutDTO> getProductById(@PathVariable String productId) {
-        ProductOutDTO productOutDTO = productService.getProductById(productId);
-        return ResponseEntity.status(HttpStatus.OK).body(productOutDTO);
+    public ResponseEntity<ProductResponse> getProductById(@PathVariable String productId) {
+        ProductResponse productResponse = productService.getProductById(productId);
+        return ResponseEntity.status(HttpStatus.OK).body(productResponse);
     }
 
     @GetMapping
@@ -41,8 +42,8 @@ public class ProductController {
 
     @PatchMapping("/{productId}")
     public ResponseEntity<String> updateProduct(@PathVariable String productId,
-                                                       @RequestBody ProductUpdateDTO productUpdateDTO) {
-        String response = productService.updateProduct(productId, productUpdateDTO);
+                                                       @RequestBody ProductUpdateRequest productUpdateRequest) {
+        String response = productService.updateProduct(productId, productUpdateRequest);
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 

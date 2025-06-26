@@ -1,4 +1,4 @@
-package com.product_service.model;
+package com.product_service.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
