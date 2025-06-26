@@ -7,6 +7,7 @@ import com.cart_service.cart.entity.Cart;
 import com.cart_service.cartitem.entity.CartItem;
 import com.cart_service.cartitem.repository.CartItemRepository;
 import com.cart_service.cart.repository.CartRepository;
+import com.cart_service.exception.CartNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,7 +27,7 @@ public class CartItemServiceImpl implements CartItemService {
     @Transactional
     public CartItem addItemToCart(Long cartId, CartItemRequest cartItemRequest) {
         Cart cart = cartRepository.findById(cartId)
-                .orElseThrow(() -> new RuntimeException("Cart not found"));
+                .orElseThrow(() -> new CartNotFoundException("Cart not found ID:" + cartId));
 
         ProductApiResponse productApiResponse = productApi.getProductById(cartItemRequest.getProductId());
 
@@ -90,7 +91,7 @@ public class CartItemServiceImpl implements CartItemService {
     @Override
     public List<CartItem> getItemsByCartId(Long cartId) {
         Cart cart = cartRepository.findById(cartId)
-                .orElseThrow(() -> new RuntimeException("Cart not found"));
+                .orElseThrow(() -> new RuntimeException("Cart not found ID: " + cartId));
 
         return cartItemRepository.findByCart(cart);
     }
