@@ -1,5 +1,6 @@
-package com.cart_service.model;
+package com.cart_service.cartitem.entity;
 
+import com.cart_service.cart.entity.Cart;
 import jakarta.persistence.*;
 import lombok.*;
 

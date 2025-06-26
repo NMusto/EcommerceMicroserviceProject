@@ -1,4 +1,4 @@
-package com.cart_service.dto.productDto;
+package com.cart_service.client.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -9,7 +9,7 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class ProductDto {
+public class ProductClientResponse {
     private String id;
     private String name;
     private String description;

@@ -1,13 +1,12 @@
-package com.cart_service.repository;
+package com.cart_service.cart.repository;
 
-import com.cart_service.model.Cart;
-import jakarta.ws.rs.Path;
+import com.cart_service.cart.entity.Cart;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
 @Repository
-public interface ICartRepository extends JpaRepository<Cart, Long> {
+public interface CartRepository extends JpaRepository<Cart, Long> {
     Optional<Cart> findByUserId(Long userId);
 }

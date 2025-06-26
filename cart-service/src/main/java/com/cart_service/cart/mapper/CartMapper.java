@@ -1,7 +1,7 @@
-package com.cart_service.mapper;
+package com.cart_service.cart.mapper;
 
-import com.cart_service.dto.cartDto.CartOutDto;
-import com.cart_service.model.Cart;
+import com.cart_service.cart.dto.CartResponse;
+import com.cart_service.cart.entity.Cart;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 
@@ -10,5 +10,5 @@ public interface CartMapper {
 
     CartMapper INSTANCE = Mappers.getMapper(CartMapper.class);
 
-    CartOutDto toCartOutDto(Cart cart);
+    CartResponse toCartOutDto(Cart cart);
 }

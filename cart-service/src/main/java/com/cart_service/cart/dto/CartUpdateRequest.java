@@ -1,4 +1,4 @@
-package com.cart_service.dto.cartDto;
+package com.cart_service.cart.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -9,7 +9,6 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class CartiInDto {
-
-    private Long userId;
+public class CartUpdateRequest {
+    private Double totalAmount;
 }

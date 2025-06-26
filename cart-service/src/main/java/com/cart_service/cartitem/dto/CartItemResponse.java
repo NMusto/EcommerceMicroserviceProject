@@ -1,4 +1,4 @@
-package com.cart_service.dto.cartItemDto;
+package com.cart_service.cartitem.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -9,7 +9,7 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class CartItemOutDto {
+public class CartItemResponse {
     private Long id;
     private Long productId;
     private String description;

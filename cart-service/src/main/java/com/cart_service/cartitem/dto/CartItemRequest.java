@@ -1,6 +1,5 @@
-package com.cart_service.dto.cartItemDto;
+package com.cart_service.cartitem.dto;
 
-import jakarta.persistence.Column;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -10,7 +9,7 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class CartItemInDto {
+public class CartItemRequest {
 
     private Long productId;
     private Integer quantity;

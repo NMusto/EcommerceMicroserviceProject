@@ -1,12 +1,12 @@
-package com.cart_service.service.cartItemService;
+package com.cart_service.cartitem.service;
 
-import com.cart_service.client.IProductApi;
-import com.cart_service.dto.cartItemDto.CartItemInDto;
-import com.cart_service.dto.productDto.ProductDto;
-import com.cart_service.model.Cart;
-import com.cart_service.model.CartItem;
-import com.cart_service.repository.ICartItemRepository;
-import com.cart_service.repository.ICartRepository;
+import com.cart_service.client.ProductApi;
+import com.cart_service.cartitem.dto.CartItemRequest;
+import com.cart_service.client.dto.ProductClientResponse;
+import com.cart_service.cart.entity.Cart;
+import com.cart_service.cartitem.entity.CartItem;
+import com.cart_service.cartitem.repository.CartItemRepository;
+import com.cart_service.cart.repository.CartRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,28 +15,28 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class CartItemService implements ICartItemService {
+public class CartItemServiceImpl implements CartItemService {
 
-    private final ICartItemRepository cartItemRepository;
-    private final ICartRepository cartRepository;
-    private final IProductApi productApi;
+    private final CartItemRepository cartItemRepository;
+    private final CartRepository cartRepository;
+    private final ProductApi productApi;
 
 
     @Override
     @Transactional
-    public CartItem addItemToCart(Long cartId, CartItemInDto cartItemInDto) {
+    public CartItem addItemToCart(Long cartId, CartItemRequest cartItemRequest) {
         Cart cart = cartRepository.findById(cartId)
                 .orElseThrow(() -> new RuntimeException("Cart not found"));
 
-        ProductDto productDto = productApi.getProductById(cartItemInDto.getProductId());
+        ProductClientResponse productClientResponse = productApi.getProductById(cartItemRequest.getProductId());
 
         CartItem item = CartItem.builder()
                 .cart(cart)
-                .productId(cartItemInDto.getProductId())
-                .description(productDto.getDescription())
-                .unitPrice(productDto.getUnitPrice())
-                .quantity(cartItemInDto.getQuantity())
-                .subtotal(cartItemInDto.getQuantity() * productDto.getUnitPrice())
+                .productId(cartItemRequest.getProductId())
+                .description(productClientResponse.getDescription())
+                .unitPrice(productClientResponse.getUnitPrice())
+                .quantity(cartItemRequest.getQuantity())
+                .subtotal(cartItemRequest.getQuantity() * productClientResponse.getUnitPrice())
                 .build();
 
         cart.getItems().add(item);

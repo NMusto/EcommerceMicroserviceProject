@@ -1,6 +1,6 @@
-package com.cart_service.controller;
+package com.cart_service.cart.controller;
 
-import com.cart_service.service.cartService.ICartService;
+import com.cart_service.cart.service.CartService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -11,5 +11,5 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/cart")
 public class CartController {
 
-    private final ICartService cartService;
+    private final CartService cartService;
 }

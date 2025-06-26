@@ -1,11 +1,11 @@
-package com.cart_service.service.cartService;
+package com.cart_service.cart.service;
 
-import com.cart_service.dto.cartDto.CartOutDto;
-import com.cart_service.dto.cartDto.CartiInDto;
-import com.cart_service.dto.cartDto.UpdateCartDto;
-import com.cart_service.mapper.CartMapper;
-import com.cart_service.model.Cart;
-import com.cart_service.repository.ICartRepository;
+import com.cart_service.cart.dto.CartResponse;
+import com.cart_service.cart.dto.CartRequest;
+import com.cart_service.cart.dto.CartUpdateRequest;
+import com.cart_service.cart.mapper.CartMapper;
+import com.cart_service.cart.entity.Cart;
+import com.cart_service.cart.repository.CartRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -15,38 +15,38 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
-public class CartService implements ICartService {
+public class CartServiceImpl implements CartService {
 
-    private final ICartRepository cartRepository;
+    private final CartRepository cartRepository;
     private final CartMapper cartMapper;
 
 
     @Override
-    public List<CartOutDto> getAllCarts() {
+    public List<CartResponse> getAllCarts() {
         return cartRepository.findAll().stream()
                 .map(cartMapper::toCartOutDto)
                 .collect(Collectors.toList());
     }
 
     @Override
-    public CartOutDto getCartById(Long cartId) {
+    public CartResponse getCartById(Long cartId) {
         Cart cart = this.getCart(cartId);
         return cartMapper.toCartOutDto(cart);
     }
 
     @Override
-    public CartOutDto getCartByUserId(Long userId) {
+    public CartResponse getCartByUserId(Long userId) {
         Cart cart = cartRepository.findByUserId(userId)
                 .orElseThrow(() -> new RuntimeException("User ID: " + userId + " not found!"));
         return cartMapper.toCartOutDto(cart);
     }
 
     @Override
-    public CartOutDto createCart(CartiInDto cartiInDto) {
-        Cart cart = cartRepository.findByUserId(cartiInDto.getUserId())
+    public CartResponse createCart(CartRequest cartRequest) {
+        Cart cart = cartRepository.findByUserId(cartRequest.getUserId())
                 .orElseGet(() -> cartRepository.save(
                         Cart.builder()
-                                .userId(cartiInDto.getUserId())
+                                .userId(cartRequest.getUserId())
                                 .items(new ArrayList<>())
                                 .totalAmount(0.0)
                                 .build()
@@ -55,9 +55,9 @@ public class CartService implements ICartService {
     }
 
     @Override
-    public CartOutDto updateCart(Long cartId, UpdateCartDto updateCartDto) {
+    public CartResponse updateCart(Long cartId, CartUpdateRequest cartUpdateRequest) {
         Cart cart = this.getCart(cartId);
-        cart.setTotalAmount(updateCartDto.getTotalAmount());
+        cart.setTotalAmount(cartUpdateRequest.getTotalAmount());
         cartRepository.save(cart);
 
         return cartMapper.toCartOutDto(cart);
@@ -76,6 +76,4 @@ public class CartService implements ICartService {
         return cartRepository.findById(cartId)
                 .orElseThrow(() -> new RuntimeException("Cart not found with ID: " + cartId));
     }
-
-
 }
