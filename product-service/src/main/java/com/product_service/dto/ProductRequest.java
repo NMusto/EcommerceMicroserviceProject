@@ -18,7 +18,7 @@ public class ProductRequest {
     @NotBlank(message = "Description is required")
     private String description;
 
-    @Positive(message = "Price must be greater than 0")
+    @Positive(message = "UnitPrice must be greater than 0")
     private Double unitPrice;
 
     @NotBlank(message = "Category is required")
