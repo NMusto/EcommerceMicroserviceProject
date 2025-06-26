@@ -7,6 +7,7 @@ import com.cart_service.cart.entity.Cart;
 import com.cart_service.cartitem.entity.CartItem;
 import com.cart_service.cartitem.repository.CartItemRepository;
 import com.cart_service.cart.repository.CartRepository;
+import com.cart_service.exception.CartItemNotFoundException;
 import com.cart_service.exception.CartNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -53,8 +54,7 @@ public class CartItemServiceImpl implements CartItemService {
     @Override
     @Transactional
     public CartItem updateItem(Long itemId, Integer newQuantity) {
-        CartItem item = cartItemRepository.findById(itemId)
-                .orElseThrow(() -> new RuntimeException("CartItem not found"));
+        CartItem item = this.getCartItem(itemId);
 
         item.setQuantity(newQuantity);
         item.setSubtotal(item.getUnitPrice() * newQuantity);
@@ -70,8 +70,7 @@ public class CartItemServiceImpl implements CartItemService {
     @Override
     @Transactional
     public void deleteItemById(Long itemId) {
-        CartItem item = cartItemRepository.findById(itemId)
-                .orElseThrow(() -> new RuntimeException("CartItem not found"));
+        CartItem item = this.getCartItem(itemId);
 
         Cart cart = item.getCart();
         double total = this.recalculateCartTotalAmount(cart);
@@ -84,14 +83,13 @@ public class CartItemServiceImpl implements CartItemService {
 
     @Override
     public CartItem getItemById(Long itemId) {
-        return cartItemRepository.findById(itemId)
-                .orElseThrow(() -> new RuntimeException("CartItem not found"));
+        return this.getCartItem(itemId);
     }
 
     @Override
     public List<CartItem> getItemsByCartId(Long cartId) {
         Cart cart = cartRepository.findById(cartId)
-                .orElseThrow(() -> new RuntimeException("Cart not found ID: " + cartId));
+                .orElseThrow(() -> new CartNotFoundException("Cart not found ID: " + cartId));
 
         return cartItemRepository.findByCart(cart);
     }
@@ -103,4 +101,8 @@ public class CartItemServiceImpl implements CartItemService {
                 .sum();
     }
 
+    public CartItem getCartItem(Long itemId) {
+        return cartItemRepository.findById(itemId)
+                .orElseThrow(() -> new CartItemNotFoundException("CartItem not found ID: " + itemId));
+    }
 }

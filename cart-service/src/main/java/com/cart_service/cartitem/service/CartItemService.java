@@ -14,6 +14,6 @@ public interface CartItemService {
     CartItem getItemById(Long itemId);
     List<CartItem> getItemsByCartId(Long cartId);
     double recalculateCartTotalAmount(Cart cart);
-
+    CartItem getCartItem(Long itemId);
 
 }
