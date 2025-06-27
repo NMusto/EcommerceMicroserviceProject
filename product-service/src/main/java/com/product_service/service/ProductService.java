@@ -13,6 +13,5 @@ public interface ProductService {
     ProductResponse getProductById(String productId);
     ProductResponse createProduct(ProductRequest ProductRequest);
     String updateProduct(String productId, ProductUpdateRequest productUpdateRequest);
-    void updateStock(String productId, Integer stock);
     String deleteProduct(String productId);
 }

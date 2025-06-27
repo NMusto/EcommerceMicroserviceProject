@@ -5,6 +5,7 @@ import com.product_service.dto.ProductRequest;
 import com.product_service.dto.ProductUpdateRequest;
 import com.product_service.dto.ProductResponse;
 import com.product_service.exception.ProductNotFoundException;
+import com.product_service.kafka.event.ProductDeletedEvent;
 import com.product_service.kafka.event.StockEvent;
 import com.product_service.kafka.producer.KafkaProducer;
 import com.product_service.mapper.ProductRequestToProduct;
@@ -14,6 +15,7 @@ import com.product_service.client.InventoryApi;
 import com.product_service.repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -87,26 +89,21 @@ public class ProductServiceImpl implements ProductService {
         return "Product with ID " + productId + " was successfully updated!";
     }
 
-    @Override
-    public void updateStock(String productId, Integer stock) {
 
-        StockEvent stockEvent = new StockEvent();
-        stockEvent.setProductId(productId);
-        stockEvent.setStock(stock);
-
-        kafkaProducer.sendStockEvent(stockEvent);
-    }
 
     @Override
+    @Transactional
     //@CacheEvict(value = "products", key = "#productId")
     public String deleteProduct(String productId) {
 
         if (!productRepository.existsById(productId)) {
             throw new ProductNotFoundException("Product not found with id: " + productId);
         }
+
+        this.deleteProductStock(productId);
+
         productRepository.deleteById(productId);
         return "Product with ID " + productId + " was successfully deleted";
-
     }
 
     private Product getProduct(String productId) {
@@ -115,4 +112,20 @@ public class ProductServiceImpl implements ProductService {
                 .orElseThrow(() -> new ProductNotFoundException("Product not found with id: " + productId));
     }
 
+    private void updateStock(String productId, Integer stock) {
+
+        StockEvent stockEvent = new StockEvent();
+        stockEvent.setProductId(productId);
+        stockEvent.setStock(stock);
+
+        kafkaProducer.sendStockEvent(stockEvent);
+    }
+
+    private void deleteProductStock(String productId) {
+
+        ProductDeletedEvent productDeletedEvent = new ProductDeletedEvent();
+        productDeletedEvent.setProductId(productId);
+
+        kafkaProducer.sendProductDeleteEvent(productDeletedEvent);
+    }
 }
