@@ -15,7 +15,7 @@ public interface CartMapper {
 
     CartMapper INSTANCE = Mappers.getMapper(CartMapper.class);
 
-    CartResponse toCartOutDto(Cart cart);
+    CartResponse toCartResponse(Cart cart);
 
     Cart toEntity(CartRequest cartRequest);
 

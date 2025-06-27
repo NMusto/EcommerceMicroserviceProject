@@ -10,7 +10,6 @@ import com.cart_service.exception.CartNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -25,28 +24,28 @@ public class CartServiceImpl implements CartService {
     @Override
     public List<CartResponse> getAllCarts() {
         return cartRepository.findAll().stream()
-                .map(cartMapper::toCartOutDto)
+                .map(cartMapper::toCartResponse)
                 .collect(Collectors.toList());
     }
 
     @Override
     public CartResponse getCartById(Long cartId) {
         Cart cart = this.getCart(cartId);
-        return cartMapper.toCartOutDto(cart);
+        return cartMapper.toCartResponse(cart);
     }
 
     @Override
     public CartResponse getCartByUserId(Long userId) {
         Cart cart = cartRepository.findByUserId(userId)
                 .orElseThrow(() -> new CartNotFoundException("User ID: " + userId + " not found!"));
-        return cartMapper.toCartOutDto(cart);
+        return cartMapper.toCartResponse(cart);
     }
 
     @Override
     public CartResponse createCart(CartRequest cartRequest) {
         Cart cart = cartRepository.findByUserId(cartRequest.getUserId())
                 .orElseGet(() -> cartMapper.toEntity(cartRequest));
-        return cartMapper.toCartOutDto(cart);
+        return cartMapper.toCartResponse(cart);
     }
 
     @Override
@@ -55,7 +54,7 @@ public class CartServiceImpl implements CartService {
         cart.setTotalAmount(cartUpdateRequest.getTotalAmount());
         cartRepository.save(cart);
 
-        return cartMapper.toCartOutDto(cart);
+        return cartMapper.toCartResponse(cart);
     }
 
     @Override

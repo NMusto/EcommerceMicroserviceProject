@@ -1,5 +1,8 @@
 package com.cart_service.cartitem.service;
 
+import com.cart_service.cartitem.dto.CartItemResponse;
+import com.cart_service.cartitem.dto.CartItemUpdateRequest;
+import com.cart_service.cartitem.mapper.CartItemMapper;
 import com.cart_service.client.ProductApi;
 import com.cart_service.cartitem.dto.CartItemRequest;
 import com.cart_service.client.dto.ProductApiResponse;
@@ -14,6 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -22,17 +26,35 @@ public class CartItemServiceImpl implements CartItemService {
     private final CartItemRepository cartItemRepository;
     private final CartRepository cartRepository;
     private final ProductApi productApi;
+    private final CartItemMapper cartItemMapper;
+
 
 
     @Override
+    public List<CartItemResponse> getItemsByCartId(Long cartId) {
+        Cart cart = cartRepository.findById(cartId)
+                .orElseThrow(() -> new CartNotFoundException("Cart not found ID: " + cartId));
+
+        return cartItemRepository.findByCart(cart).stream()
+                .map(cartItemMapper::toCartItemResponse)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public CartItemResponse getItemById(Long itemId) {
+        CartItem cartItem = this.getCartItem(itemId);
+        return cartItemMapper.toCartItemResponse(cartItem);
+    }
+
+    @Override
     @Transactional
-    public CartItem addItemToCart(Long cartId, CartItemRequest cartItemRequest) {
+    public CartItemResponse addItemToCart(Long cartId, CartItemRequest cartItemRequest) {
         Cart cart = cartRepository.findById(cartId)
                 .orElseThrow(() -> new CartNotFoundException("Cart not found ID:" + cartId));
 
         ProductApiResponse productApiResponse = productApi.getProductById(cartItemRequest.getProductId());
 
-        CartItem item = CartItem.builder()
+        CartItem cartItem = CartItem.builder()
                 .cart(cart)
                 .productId(cartItemRequest.getProductId())
                 .description(productApiResponse.getDescription())
@@ -41,35 +63,36 @@ public class CartItemServiceImpl implements CartItemService {
                 .subtotal(cartItemRequest.getQuantity() * productApiResponse.getUnitPrice())
                 .build();
 
-        cart.getItems().add(item);
+        cart.getItems().add(cartItem);
 
         double total = this.recalculateCartTotalAmount(cart);
         cart.setTotalAmount(total);
 
         cartRepository.save(cart);
 
-        return item;
+        return cartItemMapper.toCartItemResponse(cartItem);
     }
 
     @Override
     @Transactional
-    public CartItem updateItem(Long itemId, Integer newQuantity) {
-        CartItem item = this.getCartItem(itemId);
+    public CartItemResponse updateItem(Long itemId, CartItemUpdateRequest cartItemUpdateRequest) {
+        CartItem cartItem = this.getCartItem(itemId);
 
-        item.setQuantity(newQuantity);
-        item.setSubtotal(item.getUnitPrice() * newQuantity);
+        cartItem.setQuantity(cartItemUpdateRequest.getQuantity());
+        cartItem.setSubtotal(cartItem.getUnitPrice() * cartItemUpdateRequest.getQuantity());
 
-        Cart cart = item.getCart();
-        Double total = this.recalculateCartTotalAmount(item.getCart());
+        Cart cart = cartItem.getCart();
+        Double total = this.recalculateCartTotalAmount(cartItem.getCart());
         cart.setTotalAmount(total);
         cartRepository.save(cart);
 
-        return cartItemRepository.save(item);
+        cartItemRepository.save(cartItem);
+        return cartItemMapper.toCartItemResponse(cartItem);
     }
 
     @Override
     @Transactional
-    public void deleteItemById(Long itemId) {
+    public String deleteItemById(Long itemId) {
         CartItem item = this.getCartItem(itemId);
 
         Cart cart = item.getCart();
@@ -79,29 +102,16 @@ public class CartItemServiceImpl implements CartItemService {
         cart.getItems().remove(item);   // orphanRemoval = true
 
         cartRepository.save(cart);
+        return "CartItem with ID " + itemId + " was successfully deleted";
     }
 
-    @Override
-    public CartItem getItemById(Long itemId) {
-        return this.getCartItem(itemId);
-    }
-
-    @Override
-    public List<CartItem> getItemsByCartId(Long cartId) {
-        Cart cart = cartRepository.findById(cartId)
-                .orElseThrow(() -> new CartNotFoundException("Cart not found ID: " + cartId));
-
-        return cartItemRepository.findByCart(cart);
-    }
-
-    @Override
-    public double recalculateCartTotalAmount(Cart cart) {
+    private double recalculateCartTotalAmount(Cart cart) {
         return cart.getItems().stream()
                 .mapToDouble(item -> item.getSubtotal())
                 .sum();
     }
 
-    public CartItem getCartItem(Long itemId) {
+    private CartItem getCartItem(Long itemId) {
         return cartItemRepository.findById(itemId)
                 .orElseThrow(() -> new CartItemNotFoundException("CartItem not found ID: " + itemId));
     }
