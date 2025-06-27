@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -28,6 +29,30 @@ public class ProductServiceImpl implements ProductService {
     private final KafkaProducer kafkaProducer;
     private final InventoryApi inventoryApi;
 
+
+
+    @Override
+    public List<ProductResponse> getAllProducts() {
+
+        return productRepository.findAll().stream()
+                .map(product -> productToProductResponse.map(product))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    //@Cacheable(value = "products", key = "#productId", unless = "#result == null")
+    public ProductResponse getProductById(String productId) {
+
+        Product product = this.getProduct(productId);
+
+        ProductResponse productResponse = productToProductResponse.map(product);
+
+        InventoryApiResponse inventoryApiResponse = inventoryApi.getInventoryByProductId(productId);    // Fallback desde IInventoryApi, (devuelve un inventoryDTO)
+
+        productResponse.setStock(inventoryApiResponse.getStock());
+
+        return productResponse;
+    }
 
     @Override
     public ProductResponse createProduct(ProductRequest productRequest) {
@@ -63,24 +88,13 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    //@Cacheable(value = "products", key = "#productId", unless = "#result == null")
-    public ProductResponse getProductById(String productId) {
+    public void updateStock(String productId, Integer stock) {
 
-        Product product = this.getProduct(productId);
+        StockEvent stockEvent = new StockEvent();
+        stockEvent.setProductId(productId);
+        stockEvent.setStock(stock);
 
-        ProductResponse productResponse = productToProductResponse.map(product);
-
-        InventoryApiResponse inventoryApiResponse = inventoryApi.getInventoryByProductId(productId);    // Fallback desde IInventoryApi, (devuelve un inventoryDTO)
-
-        productResponse.setStock(inventoryApiResponse.getStock());
-
-        return productResponse;
-    }
-
-    @Override
-    public List<Product> getAllProducts() {
-
-        return productRepository.findAll();
+        kafkaProducer.sendStockEvent(stockEvent);
     }
 
     @Override
@@ -95,20 +109,10 @@ public class ProductServiceImpl implements ProductService {
 
     }
 
-    @Override
-    public Product getProduct(String productId) {
+    private Product getProduct(String productId) {
 
         return productRepository.findById(productId)
                 .orElseThrow(() -> new ProductNotFoundException("Product not found with id: " + productId));
     }
 
-    @Override
-    public void updateStock(String productId, Integer stock) {
-
-        StockEvent stockEvent = new StockEvent();
-        stockEvent.setProductId(productId);
-        stockEvent.setStock(stock);
-
-        kafkaProducer.sendStockEvent(stockEvent);
-    }
 }

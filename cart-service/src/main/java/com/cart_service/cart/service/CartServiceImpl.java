@@ -45,13 +45,7 @@ public class CartServiceImpl implements CartService {
     @Override
     public CartResponse createCart(CartRequest cartRequest) {
         Cart cart = cartRepository.findByUserId(cartRequest.getUserId())
-                .orElseGet(() -> cartRepository.save(
-                        Cart.builder()
-                                .userId(cartRequest.getUserId())
-                                .items(new ArrayList<>())
-                                .totalAmount(0.0)
-                                .build()
-                ));
+                .orElseGet(() -> cartMapper.toEntity(cartRequest));
         return cartMapper.toCartOutDto(cart);
     }
 
@@ -65,16 +59,17 @@ public class CartServiceImpl implements CartService {
     }
 
     @Override
-    public void deleteCart(Long cartId) {
+    public String deleteCart(Long cartId) {
         if (!cartRepository.existsById(cartId)) {
             throw new CartNotFoundException("Cart not found with ID: " + cartId);
         }
         cartRepository.deleteById(cartId);
+        return "Cart with ID " + cartId + " was successfully deleted";
     }
 
-    @Override
-    public Cart getCart(Long cartId) {
+    private Cart getCart(Long cartId) {
         return cartRepository.findById(cartId)
                 .orElseThrow(() -> new CartNotFoundException("Cart not found with ID: " + cartId));
     }
+
 }

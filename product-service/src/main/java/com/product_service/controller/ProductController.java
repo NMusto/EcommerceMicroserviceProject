@@ -22,10 +22,10 @@ public class ProductController {
     private final ProductService productService;
 
 
-    @PostMapping
-    public ResponseEntity<ProductResponse> createProduct(@Valid @RequestBody ProductRequest productRequest) {
-        ProductResponse createdProduct = productService.createProduct(productRequest);
-        return ResponseEntity.status(HttpStatus.CREATED).body(createdProduct);
+    @GetMapping
+    public ResponseEntity<List<ProductResponse>> getAllProducts() {
+        List<ProductResponse> products = productService.getAllProducts();
+        return ResponseEntity.status(HttpStatus.OK).body(products);
     }
 
     @GetMapping("/{productId}")
@@ -34,10 +34,10 @@ public class ProductController {
         return ResponseEntity.status(HttpStatus.OK).body(productResponse);
     }
 
-    @GetMapping
-    public ResponseEntity<List<Product>> getAllProducts() {
-        List<Product> products = productService.getAllProducts();
-        return ResponseEntity.status(HttpStatus.OK).body(products);
+    @PostMapping
+    public ResponseEntity<ProductResponse> createProduct(@Valid @RequestBody ProductRequest productRequest) {
+        ProductResponse createdProduct = productService.createProduct(productRequest);
+        return ResponseEntity.status(HttpStatus.CREATED).body(createdProduct);
     }
 
     @PatchMapping("/{productId}")
