@@ -18,10 +18,10 @@ spring:
                 class: org.springframework.kafka.support.serializer.JsonDeserializer
           json:
             trusted:
-              packages: "com.inventory_service.kafka.event"
+              packages: "com.inventory_service.kafka.event.*"
             value:
               default:
-                type: com.inventory_service.kafka.event.StockEvent
+                #type: com.inventory_service.kafka.event.StockEvent
 
 eureka:
   client:

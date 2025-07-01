@@ -1,5 +1,6 @@
 package com.inventory_service.kafka.consumer;
 
+import com.inventory_service.kafka.event.ProductDeletedEvent;
 import com.inventory_service.kafka.event.StockEvent;
 import com.inventory_service.entity.Inventory;
 import com.inventory_service.repository.InventoryRepository;
@@ -37,6 +38,16 @@ public class KafkaConsumer {
                             log.info("New inventory created for product ID: {}", stockEvent.getProductId());
                         }
                 );
+    }
+
+    @KafkaListener(topics = "product-delete-topic", groupId = "inventory-group")
+    public void consumeProductDeletedEvent(ProductDeletedEvent event) {
+
+        log.info("consumeProductDeletedEvent received: {}", event);
+
+        inventoryRepository.deleteByProductId(event.getProductId());
+
+        log.info("Inventory deleted for product Id: {}", event.getProductId());
     }
 
 }
