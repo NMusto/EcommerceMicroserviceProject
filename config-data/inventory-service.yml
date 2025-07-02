@@ -18,7 +18,7 @@ spring:
                 class: org.springframework.kafka.support.serializer.JsonDeserializer
           json:
             trusted:
-              packages: "com.inventory_service.kafka.event.*"
+              packages: "java.util,java.lang,com.inventory_service.kafka.event.*,com.product_service.kafka.event.*"
             value:
               default:
                 #type: com.inventory_service.kafka.event.StockEvent
