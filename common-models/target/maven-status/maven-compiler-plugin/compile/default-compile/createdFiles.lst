@@ -1,0 +1,2 @@
+com\common\models\event\StockEvent.class
+com\common\models\event\ProductDeletedEvent.class

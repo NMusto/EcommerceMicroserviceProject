@@ -77,6 +77,13 @@
 			<artifactId>jackson-databind</artifactId>
 		</dependency>
 
+		<!-- import common-models files from .m2 local repository (StockEvent, ProductDeleteEvent) -->
+		<dependency>
+			<groupId>com</groupId>
+			<artifactId>common-models</artifactId>
+			<version>1.0-SNAPSHOT</version>
+		</dependency>
+
 
 	</dependencies>
 	<dependencyManagement>

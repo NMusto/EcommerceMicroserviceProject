@@ -1,7 +1,8 @@
 package com.product_service.kafka.producer;
 
-import com.product_service.kafka.event.ProductDeletedEvent;
-import com.product_service.kafka.event.StockEvent;
+
+import com.common.models.event.StockEvent;
+import com.common.models.event.ProductDeletedEvent;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Component;

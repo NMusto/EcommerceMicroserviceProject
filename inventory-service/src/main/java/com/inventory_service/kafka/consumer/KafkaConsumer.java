@@ -1,7 +1,7 @@
 package com.inventory_service.kafka.consumer;
 
-import com.inventory_service.kafka.event.ProductDeletedEvent;
-import com.inventory_service.kafka.event.StockEvent;
+import com.common.models.event.StockEvent;
+import com.common.models.event.ProductDeletedEvent;
 import com.inventory_service.entity.Inventory;
 import com.inventory_service.repository.InventoryRepository;
 import lombok.extern.slf4j.Slf4j;
