@@ -18,7 +18,7 @@ spring:
                 class: org.springframework.kafka.support.serializer.JsonDeserializer
           json:
             trusted:
-              packages: "com.common.models.event.*"
+              packages: "*"
             
 
 eureka:
