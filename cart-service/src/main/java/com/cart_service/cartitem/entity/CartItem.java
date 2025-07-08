@@ -22,7 +22,7 @@ public class CartItem {
     private Cart cart;
 
     @Column(name = "product_id")
-    private Long productId;
+    private String productId;
 
     private String description;
 

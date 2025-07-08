@@ -10,7 +10,7 @@ import java.util.Optional;
 @Repository
 public interface InventoryRepository extends MongoRepository<Inventory, String> {
 
-    Optional<Inventory> findByProductId(@PathVariable String productId);
+    Optional<Inventory> findByProductId(String productId);
 
-    void deleteByProductId(@PathVariable String productId);
+    void deleteByProductId(String productId);
 }

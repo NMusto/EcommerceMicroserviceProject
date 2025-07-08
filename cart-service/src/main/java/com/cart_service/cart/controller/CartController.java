@@ -33,7 +33,7 @@ public class CartController {
         return ResponseEntity.status(HttpStatus.OK).body(cartResponse);
     }
 
-    @GetMapping("/{userId}")
+    @GetMapping("/user/{userId}")
     public ResponseEntity<CartResponse> getCartByUserId(@PathVariable Long userId) {
         CartResponse cartResponse = cartService.getCartByUserId(userId);
         return ResponseEntity.status(HttpStatus.OK).body(cartResponse);

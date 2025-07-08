@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/cartitem")
+@RequestMapping("/api/item")
 @RequiredArgsConstructor
 public class CartItemController {
 
@@ -34,7 +34,7 @@ public class CartItemController {
         return ResponseEntity.status(HttpStatus.OK).body(cartItemResponse);
     }
 
-    @PostMapping("/cartId")
+    @PostMapping("/{cartId}")
     public ResponseEntity<CartItemResponse> addItemToCart(@PathVariable Long cartId, @Valid @RequestBody CartItemRequest cartItemRequest) {
         CartItemResponse cartItemResponse = cartItemService.addItemToCart(cartId, cartItemRequest);
         return ResponseEntity.status(HttpStatus.CREATED).body(cartItemResponse);

@@ -14,7 +14,7 @@ import lombok.Setter;
 public class CartItemRequest {
 
     @NotBlank(message = "ProductId is required")
-    private Long productId;
+    private String productId;
 
     @Positive(message = "Quantity must be greater than 0")
     private Integer quantity;

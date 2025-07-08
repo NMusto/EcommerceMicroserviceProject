@@ -45,6 +45,8 @@ public class CartServiceImpl implements CartService {
     public CartResponse createCart(CartRequest cartRequest) {
         Cart cart = cartRepository.findByUserId(cartRequest.getUserId())
                 .orElseGet(() -> cartMapper.toEntity(cartRequest));
+        cartRepository.save(cart);
+
         return cartMapper.toCartResponse(cart);
     }
 
