@@ -49,7 +49,7 @@ public class ProductServiceImpl implements ProductService {
 
         ProductResponse productResponse = productToProductResponse.map(product);
 
-        InventoryApiResponse inventoryApiResponse = inventoryApi.getInventoryByProductId(productId);    // Fallback desde IInventoryApi, (devuelve un inventoryDTO)
+        InventoryApiResponse inventoryApiResponse = inventoryApi.getInventoryByProductId(productId);    // Fallback from IInventoryApi, (retrieves inventoryDTO)
 
         productResponse.setStock(inventoryApiResponse.getStock());
 

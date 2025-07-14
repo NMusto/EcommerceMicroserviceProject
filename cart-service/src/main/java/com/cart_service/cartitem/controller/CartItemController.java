@@ -1,8 +1,6 @@
 package com.cart_service.cartitem.controller;
 
-import com.cart_service.cart.dto.CartRequest;
-import com.cart_service.cart.dto.CartResponse;
-import com.cart_service.cart.dto.CartUpdateRequest;
+
 import com.cart_service.cartitem.dto.CartItemRequest;
 import com.cart_service.cartitem.dto.CartItemResponse;
 import com.cart_service.cartitem.dto.CartItemUpdateRequest;

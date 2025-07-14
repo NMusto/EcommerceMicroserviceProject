@@ -13,6 +13,7 @@ import com.cart_service.cart.repository.CartRepository;
 import com.cart_service.exception.CartItemNotFoundException;
 import com.cart_service.exception.CartNotFoundException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,6 +22,7 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class CartItemServiceImpl implements CartItemService {
 
     private final CartItemRepository cartItemRepository;
@@ -49,6 +51,7 @@ public class CartItemServiceImpl implements CartItemService {
     @Override
     @Transactional
     public CartItemResponse addItemToCart(Long cartId, CartItemRequest cartItemRequest) {
+
         Cart cart = cartRepository.findById(cartId)
                 .orElseThrow(() -> new CartNotFoundException("Cart not found ID:" + cartId));
 
@@ -62,6 +65,8 @@ public class CartItemServiceImpl implements CartItemService {
                 .quantity(cartItemRequest.getQuantity())
                 .subtotal(cartItemRequest.getQuantity() * productApiResponse.getUnitPrice())
                 .build();
+
+        cartItemRepository.save(cartItem);
 
         cart.getItems().add(cartItem);
 
@@ -80,13 +85,13 @@ public class CartItemServiceImpl implements CartItemService {
 
         cartItem.setQuantity(cartItemUpdateRequest.getQuantity());
         cartItem.setSubtotal(cartItem.getUnitPrice() * cartItemUpdateRequest.getQuantity());
+        cartItemRepository.save(cartItem);
 
         Cart cart = cartItem.getCart();
         Double total = this.recalculateCartTotalAmount(cartItem.getCart());
         cart.setTotalAmount(total);
         cartRepository.save(cart);
 
-        cartItemRepository.save(cartItem);
         return cartItemMapper.toCartItemResponse(cartItem);
     }
 
@@ -96,10 +101,10 @@ public class CartItemServiceImpl implements CartItemService {
         CartItem item = this.getCartItem(itemId);
 
         Cart cart = item.getCart();
+        cart.getItems().remove(item);   // orphanRemoval = true
+
         double total = this.recalculateCartTotalAmount(cart);
         cart.setTotalAmount(total);
-
-        cart.getItems().remove(item);   // orphanRemoval = true
 
         cartRepository.save(cart);
         return "CartItem with ID " + itemId + " was successfully deleted";
