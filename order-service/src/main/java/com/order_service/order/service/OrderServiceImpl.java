@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -22,7 +23,9 @@ public class OrderServiceImpl implements OrderService{
 
     @Override
     public List<OrderResponse> getAllOrders() {
-        return null;
+        return orderRepository.findAll().stream()
+                .map(orderMapper::toOrderResponse)
+                .collect(Collectors.toList());
     }
 
     @Override
