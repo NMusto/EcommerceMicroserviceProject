@@ -72,6 +72,8 @@ public class OrderServiceImpl implements OrderService{
         order.setItems(orderItems);
         orderRepository.save(order);
 
+        cartApi.clearCart(orderRequest.getUserId());
+
         return orderMapper.toOrderResponse(order);
     }
 
