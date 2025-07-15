@@ -1,5 +1,6 @@
 package com.order_service.order.mapper;
 
+import com.order_service.order.dto.OrderRequest;
 import com.order_service.order.dto.OrderResponse;
 import com.order_service.order.entity.Order;
 import org.mapstruct.Mapper;
@@ -8,4 +9,6 @@ import org.mapstruct.Mapper;
 public interface OrderMapper {
 
     OrderResponse toOrderResponse(Order order);
+
+    Order toEntity(OrderRequest orderRequest);
 }

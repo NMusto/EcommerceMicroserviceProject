@@ -5,11 +5,13 @@ import com.order_service.order.dto.OrderResponse;
 import com.order_service.order.dto.OrderUpdateRequest;
 import com.order_service.order.dto.OrderUpdateState;
 import com.order_service.order.entity.Order;
+import com.order_service.order.entity.OrderState;
 import com.order_service.order.mapper.OrderMapper;
 import com.order_service.order.repository.OrderRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -43,7 +45,17 @@ public class OrderServiceImpl implements OrderService{
 
     @Override
     public OrderResponse createOrder(OrderRequest orderRequest) {
-        return null;
+
+        Order order = orderMapper.toEntity(orderRequest);
+
+        order.setCreatedAt(LocalDateTime.now());
+        order.setOrderState(OrderState.PENDING);
+
+        order.setTotalAmount(null);
+
+        orderRepository.save(order);
+
+        return orderMapper.toOrderResponse(order);
     }
 
     @Override
