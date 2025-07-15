@@ -27,12 +27,15 @@ public class OrderServiceImpl implements OrderService{
 
     @Override
     public OrderResponse getOrderById(Long orderId) {
-        return null;
+        Order order = this.getOrder(orderId);
+        return orderMapper.toOrderResponse(order);
     }
 
     @Override
     public OrderResponse getOrderByUserId(Long userId) {
-        return null;
+        Order order = orderRepository.findByUserId(userId)
+                .orElseThrow(() -> new RuntimeException("User ID: " + userId + " not found!"));
+        return orderMapper.toOrderResponse(order);
     }
 
     @Override
