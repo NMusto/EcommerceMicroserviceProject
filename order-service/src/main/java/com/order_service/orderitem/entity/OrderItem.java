@@ -1,5 +1,6 @@
-package com.order_service.model;
+package com.order_service.orderitem.entity;
 
+import com.order_service.order.entity.Order;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
