@@ -30,7 +30,7 @@ public class Order {
     private Double totalAmount;
 
     @Enumerated(EnumType.STRING)
-    private Status status;
+    private OrderState orderState;
 
     @Column(name = "created_at")
     private LocalDate createdAt;

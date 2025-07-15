@@ -12,15 +12,15 @@ import lombok.Setter;
 @NoArgsConstructor
 public class OrderRequest {
 
-    @NotNull(message = "UserId is required")
+    @NotNull(message = "User Id is required")
     private Long userId;
 
-    @NotNull(message = "shippingAddress is required")
+    @NotNull(message = "Shipping address is required")
     private String shippingAddress;
 
-    @NotNull(message = "shippingCity is required")
+    @NotNull(message = "Shipping city is required")
     private String shippingCity;
 
-    @NotNull(message = "shippingPostalCode is require")
+    @NotNull(message = "Shipping postal code is require")
     private String shippingPostalCode;
 }
