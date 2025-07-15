@@ -14,5 +14,6 @@ public interface CartService {
     CartResponse getCartByUserId(Long userId);
     CartResponse createCart(CartRequest cartRequest);
     CartResponse updateCart(Long cartId, CartUpdateRequest cartUpdateRequest);
+    String clearCart(Long userId);
     String deleteCart(Long cartId);
 }
