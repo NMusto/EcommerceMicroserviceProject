@@ -51,6 +51,8 @@ public class OrderServiceImpl implements OrderService{
         order.setCreatedAt(LocalDateTime.now());
         order.setOrderState(OrderState.PENDING);
 
+        //PEDIDO FEING A CART
+
         order.setTotalAmount(null);
 
         orderRepository.save(order);

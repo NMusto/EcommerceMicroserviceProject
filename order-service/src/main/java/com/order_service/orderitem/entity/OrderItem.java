@@ -26,14 +26,12 @@ public class OrderItem {
     @Column(name = "product_id")
     private Long productId;
 
-    @Column(name = "product_name")
-    private String productName;
-
-    @Column(name = "product_description")
-    private String productDescription;
+    private String description;
 
     private Integer quantity;
 
     @Column(name = "unit_price")
     private Double unitPrice;
+
+    private Double subtotal;
 }

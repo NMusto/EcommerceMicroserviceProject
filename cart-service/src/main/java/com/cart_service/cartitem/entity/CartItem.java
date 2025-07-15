@@ -32,5 +32,4 @@ public class CartItem {
     private Double unitPrice;
 
     private Double subtotal;
-
 }
