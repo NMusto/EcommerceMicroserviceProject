@@ -79,7 +79,20 @@ public class OrderServiceImpl implements OrderService{
 
     @Override
     public OrderResponse updateOrder(Long orderId, OrderUpdateRequest orderUpdateRequest) {
-        return null;
+        Order order = this.getOrder(orderId);
+
+        if (orderUpdateRequest.getShippingAddress() != null) {
+            order.setShippingAddress(orderUpdateRequest.getShippingAddress());
+        }
+        if (orderUpdateRequest.getShippingCity() != null) {
+            order.setShippingCity(orderUpdateRequest.getShippingCity());
+        }
+        if (orderUpdateRequest.getShippingPostalCode() != null) {
+            order.setShippingPostalCode(orderUpdateRequest.getShippingPostalCode());
+        }
+
+        orderRepository.save(order);
+        return orderMapper.toOrderResponse(order);
     }
 
     @Override

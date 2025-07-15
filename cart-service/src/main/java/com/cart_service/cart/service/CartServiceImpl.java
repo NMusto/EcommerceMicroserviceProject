@@ -53,7 +53,11 @@ public class CartServiceImpl implements CartService {
     @Override
     public CartResponse updateCart(Long cartId, CartUpdateRequest cartUpdateRequest) {
         Cart cart = this.getCart(cartId);
-        cart.setTotalAmount(cartUpdateRequest.getTotalAmount());
+
+        if(cartUpdateRequest.getTotalAmount() != null) {
+            cart.setTotalAmount(cartUpdateRequest.getTotalAmount());
+        }
+
         cartRepository.save(cart);
 
         return cartMapper.toCartResponse(cart);
