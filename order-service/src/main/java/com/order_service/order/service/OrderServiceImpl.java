@@ -1,5 +1,7 @@
 package com.order_service.order.service;
 
+import com.order_service.client.CartApi;
+import com.order_service.client.dto.CartApiResponse;
 import com.order_service.order.dto.OrderRequest;
 import com.order_service.order.dto.OrderResponse;
 import com.order_service.order.dto.OrderUpdateRequest;
@@ -8,6 +10,8 @@ import com.order_service.order.entity.Order;
 import com.order_service.order.entity.OrderState;
 import com.order_service.order.mapper.OrderMapper;
 import com.order_service.order.repository.OrderRepository;
+import com.order_service.orderitem.entity.OrderItem;
+import com.order_service.orderitem.mapper.OrderItemMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -21,6 +25,8 @@ public class OrderServiceImpl implements OrderService{
 
     private final OrderRepository orderRepository;
     private final OrderMapper orderMapper;
+    private final CartApi cartApi;
+    private final OrderItemMapper orderItemMapper;
 
 
     @Override
@@ -46,15 +52,24 @@ public class OrderServiceImpl implements OrderService{
     @Override
     public OrderResponse createOrder(OrderRequest orderRequest) {
 
+        CartApiResponse cart = cartApi.getCartByUserId(orderRequest.getUserId());
+
         Order order = orderMapper.toEntity(orderRequest);
 
         order.setCreatedAt(LocalDateTime.now());
         order.setOrderState(OrderState.PENDING);
+        order.setUserId(orderRequest.getUserId());
+        order.setTotalAmount(cart.getTotalAmount());
 
-        //PEDIDO FEING A CART
+        List<OrderItem> orderItems = cart.getItems().stream()
+                        .map(item -> {
+                            OrderItem orderItem = orderItemMapper.toOrderItem(item);
+                            orderItem.setOrder(order);
+                            return orderItem;
+                        })
+                                .collect(Collectors.toList());
 
-        order.setTotalAmount(null);
-
+        order.setItems(orderItems);
         orderRepository.save(order);
 
         return orderMapper.toOrderResponse(order);
