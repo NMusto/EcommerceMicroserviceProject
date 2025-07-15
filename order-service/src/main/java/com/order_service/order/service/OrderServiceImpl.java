@@ -97,12 +97,20 @@ public class OrderServiceImpl implements OrderService{
 
     @Override
     public OrderResponse updateOrderState(Long orderId, OrderUpdateState orderUpdateState) {
-        return null;
+        Order order = this.getOrder(orderId);
+        order.setOrderState(orderUpdateState.getOrderState());
+        orderRepository.save(order);
+
+        return orderMapper.toOrderResponse(order);
     }
 
     @Override
     public String deleteOrder(Long orderId) {
-        return null;
+        if (!orderRepository.existsById(orderId)) {
+            throw new RuntimeException("Order not found with ID: " + orderId);
+        }
+        orderRepository.deleteById(orderId);
+        return "Order with ID " + orderId + " was successfully deleted";
     }
 
     private Order getOrder(Long orderId) {
