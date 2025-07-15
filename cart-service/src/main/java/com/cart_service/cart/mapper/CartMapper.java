@@ -7,7 +7,6 @@ import com.cart_service.cartitem.mapper.CartItemMapper;
 import org.mapstruct.AfterMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingTarget;
-import org.mapstruct.factory.Mappers;
 
 import java.util.ArrayList;
 
