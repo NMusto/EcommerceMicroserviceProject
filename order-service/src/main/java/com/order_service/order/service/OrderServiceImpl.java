@@ -2,6 +2,7 @@ package com.order_service.order.service;
 
 import com.order_service.client.CartApi;
 import com.order_service.client.dto.CartApiResponse;
+import com.order_service.exception.OrderNotFoundException;
 import com.order_service.order.dto.OrderRequest;
 import com.order_service.order.dto.OrderResponse;
 import com.order_service.order.dto.OrderUpdateRequest;
@@ -45,7 +46,7 @@ public class OrderServiceImpl implements OrderService{
     @Override
     public OrderResponse getOrderByUserId(Long userId) {
         Order order = orderRepository.findByUserId(userId)
-                .orElseThrow(() -> new RuntimeException("User ID: " + userId + " not found!"));
+                .orElseThrow(() -> new OrderNotFoundException("User ID: " + userId + " not found!"));
         return orderMapper.toOrderResponse(order);
     }
 
@@ -107,7 +108,7 @@ public class OrderServiceImpl implements OrderService{
     @Override
     public String deleteOrder(Long orderId) {
         if (!orderRepository.existsById(orderId)) {
-            throw new RuntimeException("Order not found with ID: " + orderId);
+            throw new OrderNotFoundException("Order not found with ID: " + orderId);
         }
         orderRepository.deleteById(orderId);
         return "Order with ID " + orderId + " was successfully deleted";
@@ -115,6 +116,6 @@ public class OrderServiceImpl implements OrderService{
 
     private Order getOrder(Long orderId) {
         return orderRepository.findById(orderId)
-                .orElseThrow(() -> new RuntimeException("Order not found with ID: " + orderId));
+                .orElseThrow(() -> new OrderNotFoundException("Order not found with ID: " + orderId));
     }
 }
