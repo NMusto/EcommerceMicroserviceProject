@@ -33,7 +33,7 @@ public class OrderController {
         return ResponseEntity.status(HttpStatus.OK).body(orderResponse);
     }
 
-    @GetMapping("/{userId}")
+    @GetMapping("/user/{userId}")
     public ResponseEntity<OrderResponse> getOrderByUserId(@PathVariable Long userId) {
         OrderResponse orderResponse = orderService.getOrderByUserId(userId);
         return ResponseEntity.status(HttpStatus.OK).body(orderResponse);

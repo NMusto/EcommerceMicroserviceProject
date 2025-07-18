@@ -13,13 +13,17 @@ import com.order_service.order.mapper.OrderMapper;
 import com.order_service.order.repository.OrderRepository;
 import com.order_service.orderitem.entity.OrderItem;
 import com.order_service.orderitem.mapper.OrderItemMapper;
+import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class OrderServiceImpl implements OrderService{
@@ -62,6 +66,8 @@ public class OrderServiceImpl implements OrderService{
         order.setUserId(orderRequest.getUserId());
         order.setTotalAmount(cart.getTotalAmount());
 
+        log.info("cart.getItems 1 {}", cart.getItems());
+
         List<OrderItem> orderItems = cart.getItems().stream()
                         .map(item -> {
                             OrderItem orderItem = orderItemMapper.toOrderItem(item);
@@ -69,6 +75,8 @@ public class OrderServiceImpl implements OrderService{
                             return orderItem;
                         })
                                 .collect(Collectors.toList());
+
+        log.info("orderItems 2 {}", orderItems);
 
         order.setItems(orderItems);
         orderRepository.save(order);

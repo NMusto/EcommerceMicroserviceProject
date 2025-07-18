@@ -1,15 +1,13 @@
-package com.cart_service.cartitem.dto;
+package com.order_service.orderitem.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class CartItemResponse {
+public class OrderItemResponse {
+
     private Long id;
     private String productId;
     private String description;

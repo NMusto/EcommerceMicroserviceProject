@@ -1,11 +1,8 @@
 package com.order_service.order.dto;
 
 import com.order_service.order.entity.OrderState;
-import com.order_service.orderitem.entity.OrderItem;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import com.order_service.orderitem.dto.OrderItemResponse;
+import lombok.*;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -23,6 +20,6 @@ public class OrderResponse {
     private String shippingAddress;
     private String shippingCity;
     private String shippingPostalCode;
-    private List<OrderItem> items;
+    private List<OrderItemResponse> items;
     private Double totalAmount;
 }

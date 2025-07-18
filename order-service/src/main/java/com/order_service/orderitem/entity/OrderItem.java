@@ -2,16 +2,14 @@ package com.order_service.orderitem.entity;
 
 import com.order_service.order.entity.Order;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @Entity
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@ToString(exclude = "order")
 @Table(name = "order_items")
 public class OrderItem {
 
@@ -24,7 +22,7 @@ public class OrderItem {
     private Order order;
 
     @Column(name = "product_id")
-    private Long productId;
+    private String productId;
 
     private String description;
 

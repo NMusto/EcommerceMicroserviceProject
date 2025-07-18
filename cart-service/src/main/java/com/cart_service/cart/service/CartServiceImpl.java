@@ -70,6 +70,7 @@ public class CartServiceImpl implements CartService {
                 .orElseThrow(() -> new CartNotFoundException("Cart not found"));
 
         cart.getItems().clear();
+        cart.setTotalAmount(0.0);
         cartRepository.save(cart);
         return "Cart cleared successfully";
     }

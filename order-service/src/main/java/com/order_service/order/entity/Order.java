@@ -2,10 +2,7 @@ package com.order_service.order.entity;
 
 import com.order_service.orderitem.entity.OrderItem;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
