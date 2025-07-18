@@ -9,7 +9,6 @@ import lombok.*;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@ToString(exclude = "order")
 @Table(name = "order_items")
 public class OrderItem {
 

@@ -2,7 +2,6 @@ package com.order_service.client.dto;
 
 import lombok.*;
 
-@ToString
 @Getter
 @Setter
 @AllArgsConstructor

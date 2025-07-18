@@ -8,7 +8,6 @@ import java.util.List;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@ToString
 public class CartApiResponse {
     private Long id;
     private Long userId;
