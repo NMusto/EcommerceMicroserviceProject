@@ -46,6 +46,18 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
     }
 
+    @ExceptionHandler(CartServiceUnavailableException.class)
+    public ResponseEntity<ErrorResponse> handleCartServiceUnavailable(CartServiceUnavailableException ex) {
+
+        ErrorResponse errorResponse = new ErrorResponse(
+                HttpStatus.SERVICE_UNAVAILABLE,
+                ex.getMessage(),
+                null
+        );
+
+        return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(errorResponse);
+    }
+
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorResponse> handleGlobalException(Exception ex) {
         log.error("An unexpected error occurred: {}", ex.getMessage());
