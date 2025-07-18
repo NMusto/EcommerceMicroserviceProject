@@ -10,6 +10,6 @@ public class CartApiFallback implements CartApi{
 
     @Override
     public void createCart(CartRequest cartRequest) {
-        log.info("CartApiFallback activated");
+
     }
 }
