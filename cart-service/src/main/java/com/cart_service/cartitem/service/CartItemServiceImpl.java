@@ -17,6 +17,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -53,7 +54,14 @@ public class CartItemServiceImpl implements CartItemService {
     public CartItemResponse addItemToCart(Long cartId, CartItemRequest cartItemRequest) {
 
         Cart cart = cartRepository.findById(cartId)
-                .orElseThrow(() -> new CartNotFoundException("Cart not found ID:" + cartId));
+                .orElseGet(() -> {
+                    Cart newCart = Cart.builder()
+                            .userId(cartItemRequest.getUserId())
+                            .items(new ArrayList<>())
+                            .totalAmount(0.0)
+                            .build();
+                    return cartRepository.save(newCart);
+                });
 
         ProductApiResponse productApiResponse = productApi.getProductById(cartItemRequest.getProductId());
 

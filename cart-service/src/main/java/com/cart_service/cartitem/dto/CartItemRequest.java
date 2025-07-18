@@ -18,4 +18,8 @@ public class CartItemRequest {
 
     @Positive(message = "Quantity must be greater than 0")
     private Integer quantity;
+
+    @NotBlank(message = "UserId is required")
+    private Long userId;    // Used to create the Cart if it does not exist
+
 }
