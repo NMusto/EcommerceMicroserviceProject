@@ -1,5 +1,7 @@
 package com.user_service.service;
 
+import com.user_service.client.CartApi;
+import com.user_service.client.dto.CartRequest;
 import com.user_service.dto.UserRequest;
 import com.user_service.dto.UserResponse;
 import com.user_service.dto.UserUpdateRequest;
@@ -18,6 +20,7 @@ public class UserServiceImpl implements UserService{
 
     private final UserRepository userRepository;
     private final UserMapper userMapper;
+    private final CartApi cartApi;
 
 
     @Override
@@ -35,7 +38,13 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public UserResponse createUser(UserRequest userRequest) {
-        return null;
+        User user = userMapper.toUser(userRequest);
+        userRepository.save(user);
+
+        CartRequest cartRequest = new CartRequest(user.getId());
+        cartApi.createCart(cartRequest);
+
+        return userMapper.toUserResponse(user);
     }
 
     @Override

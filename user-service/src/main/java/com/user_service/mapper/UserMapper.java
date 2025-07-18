@@ -1,5 +1,6 @@
 package com.user_service.mapper;
 
+import com.user_service.dto.UserRequest;
 import com.user_service.dto.UserResponse;
 import com.user_service.entity.User;
 import org.mapstruct.Mapper;
@@ -8,4 +9,6 @@ import org.mapstruct.Mapper;
 public interface UserMapper {
 
     UserResponse toUserResponse(User user);
+
+    User toUser(UserRequest userRequest);
 }
