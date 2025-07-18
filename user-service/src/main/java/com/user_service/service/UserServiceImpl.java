@@ -3,6 +3,7 @@ package com.user_service.service;
 import com.user_service.dto.UserRequest;
 import com.user_service.dto.UserResponse;
 import com.user_service.dto.UserUpdateRequest;
+import com.user_service.entity.User;
 import com.user_service.mapper.UserMapper;
 import com.user_service.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -28,7 +29,8 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public UserResponse getUserById(Long userId) {
-        return null;
+        User user = this.getUser(userId);
+        return userMapper.toUserResponse(user);
     }
 
     @Override
@@ -44,5 +46,10 @@ public class UserServiceImpl implements UserService{
     @Override
     public String deleteUser(Long userId) {
         return null;
+    }
+
+    private User getUser(Long userId) {
+        return userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("User not found with ID: " + userId));
     }
 }
