@@ -48,8 +48,24 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public String updateUser(Long userid, UserUpdateRequest userUpdateRequest) {
-        return null;
+    public UserResponse updateUser(Long userid, UserUpdateRequest userUpdateRequest) {
+        User user = this.getUser(userid);
+
+        if (userUpdateRequest.name() != null) {
+            user.setName(userUpdateRequest.name());
+        }
+        if (userUpdateRequest.lastname() != null) {
+            user.setLastname(userUpdateRequest.lastname());
+        }
+        if (userUpdateRequest.phone() != null) {
+            user.setPhone(userUpdateRequest.phone());
+        }
+        if (userUpdateRequest.email() != null) {
+            user.setEmail(userUpdateRequest.email());
+        }
+        userRepository.save(user);
+        
+        return userMapper.toUserResponse(user);
     }
 
     @Override
