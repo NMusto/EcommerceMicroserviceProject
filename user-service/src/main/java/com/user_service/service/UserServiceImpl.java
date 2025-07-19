@@ -40,7 +40,7 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public CartApiResponse getCartByUserId(Long userId) {
-
+        return cartApi.getCartByUserId(userId);
     }
 
     @Override
