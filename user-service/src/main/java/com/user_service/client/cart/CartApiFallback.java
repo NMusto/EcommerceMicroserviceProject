@@ -1,6 +1,7 @@
 package com.user_service.client.cart;
 
 import com.user_service.client.cart.dto.CartApiRequest;
+import com.user_service.client.cart.dto.CartApiResponse;
 import com.user_service.exception.CartServiceUnavailableException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -10,7 +11,14 @@ import org.springframework.stereotype.Component;
 public class CartApiFallback implements CartApi {
 
     @Override
+    public CartApiResponse getCartByUserId(Long userId) {
+        log.error("Fallback activated: getCartByUserId failed for userId {}", userId);
+        throw new CartServiceUnavailableException("Cart service is unavailable. Cannot retrieve cart for user ID: " + userId);
+    }
+
+    @Override
     public void createCart(CartApiRequest cartApiRequest) {
+        log.error("Fallback activated: createCart failed for userId {}", cartApiRequest.userId());
         throw new CartServiceUnavailableException("Cart service is unavailable. Cannot create cart for user ID: " + cartApiRequest.userId());
     }
 }

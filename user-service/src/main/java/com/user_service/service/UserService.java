@@ -1,5 +1,6 @@
 package com.user_service.service;
 
+import com.user_service.client.cart.dto.CartApiResponse;
 import com.user_service.dto.UserRequest;
 import com.user_service.dto.UserResponse;
 import com.user_service.dto.UserUpdateRequest;
@@ -13,7 +14,9 @@ public interface UserService {
 
 
 
-    // getCartByUserId(Long userId);
+    CartApiResponse getCartByUserId(Long userId);
+
+
     // getOrdersByUserId(Long userId);
 
 

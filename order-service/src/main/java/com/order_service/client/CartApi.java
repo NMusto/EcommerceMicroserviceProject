@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 public interface CartApi {
 
     @GetMapping("/api/cart/{userId}")
-    public CartApiResponse getCartByUserId(@PathVariable("userId") Long userId);
+    CartApiResponse getCartByUserId(@PathVariable("userId") Long userId);
 
     @DeleteMapping("api/cart/clearitems/{userId}")
     void clearCart(@PathVariable("userId") Long userId);

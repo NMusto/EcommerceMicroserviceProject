@@ -2,6 +2,7 @@ package com.user_service.service;
 
 import com.user_service.client.cart.CartApi;
 import com.user_service.client.cart.dto.CartApiRequest;
+import com.user_service.client.cart.dto.CartApiResponse;
 import com.user_service.dto.UserRequest;
 import com.user_service.dto.UserResponse;
 import com.user_service.dto.UserUpdateRequest;
@@ -35,6 +36,11 @@ public class UserServiceImpl implements UserService{
     public UserResponse getUserById(Long userId) {
         User user = this.getUser(userId);
         return userMapper.toUserResponse(user);
+    }
+
+    @Override
+    public CartApiResponse getCartByUserId(Long userId) {
+
     }
 
     @Override
