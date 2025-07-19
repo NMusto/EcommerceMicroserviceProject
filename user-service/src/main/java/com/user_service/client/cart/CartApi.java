@@ -1,6 +1,6 @@
-package com.user_service.client;
+package com.user_service.client.cart;
 
-import com.user_service.client.dto.CartRequest;
+import com.user_service.client.cart.dto.CartApiRequest;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -9,5 +9,5 @@ import org.springframework.web.bind.annotation.RequestBody;
 public interface CartApi {
 
     @PostMapping("/api/cart")
-    void createCart(@RequestBody CartRequest cartRequest);
+    void createCart(@RequestBody CartApiRequest cartApiRequest);
 }

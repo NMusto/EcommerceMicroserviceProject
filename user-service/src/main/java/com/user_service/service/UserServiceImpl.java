@@ -1,7 +1,7 @@
 package com.user_service.service;
 
-import com.user_service.client.CartApi;
-import com.user_service.client.dto.CartRequest;
+import com.user_service.client.cart.CartApi;
+import com.user_service.client.cart.dto.CartApiRequest;
 import com.user_service.dto.UserRequest;
 import com.user_service.dto.UserResponse;
 import com.user_service.dto.UserUpdateRequest;
@@ -42,8 +42,8 @@ public class UserServiceImpl implements UserService{
         User user = userMapper.toUser(userRequest);
         userRepository.save(user);
 
-        CartRequest cartRequest = new CartRequest(user.getId());
-        cartApi.createCart(cartRequest);
+        CartApiRequest cartApiRequest = new CartApiRequest(user.getId());
+        cartApi.createCart(cartApiRequest);
 
         return userMapper.toUserResponse(user);
     }
