@@ -6,6 +6,7 @@ import com.user_service.dto.UserRequest;
 import com.user_service.dto.UserResponse;
 import com.user_service.dto.UserUpdateRequest;
 import com.user_service.entity.User;
+import com.user_service.exception.UserNotFoundException;
 import com.user_service.mapper.UserMapper;
 import com.user_service.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -64,17 +65,22 @@ public class UserServiceImpl implements UserService{
             user.setEmail(userUpdateRequest.email());
         }
         userRepository.save(user);
-        
+
         return userMapper.toUserResponse(user);
     }
 
     @Override
     public String deleteUser(Long userId) {
-        return null;
+        if ( !userRepository.existsById(userId) ) {
+            throw new UserNotFoundException("User not found with ID: " + userId);
+        }
+
+        userRepository.deleteById(userId);
+        return "User with ID " + userId + " was successfully deleted";
     }
 
     private User getUser(Long userId) {
         return userRepository.findById(userId)
-                .orElseThrow(() -> new RuntimeException("User not found with ID: " + userId));
+                .orElseThrow(() -> new UserNotFoundException("User not found with ID: " + userId));
     }
 }
