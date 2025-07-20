@@ -13,7 +13,7 @@ public class CartApiFallback implements CartApi {
     @Override
     public CartApiResponse getCartByUserId(Long userId) {
         log.error("Fallback activated: getCartByUserId failed for userId {}", userId);
-        throw new CartServiceUnavailableException("Cart service is unavailable. Cannot retrieve cart for user ID: " + userId);
+        throw new CartServiceUnavailableException("Cart service is unavailable. Cannot retrieve Cart for user ID: " + userId);
     }
 
     @Override

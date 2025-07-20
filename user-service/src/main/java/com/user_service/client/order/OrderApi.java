@@ -10,5 +10,4 @@ public interface OrderApi {
 
     @GetMapping("/api/order/user/{userId}")
     OrderApiResponse getOrderByUserId(@PathVariable("userId") Long userId);
-
 }

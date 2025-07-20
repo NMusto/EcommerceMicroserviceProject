@@ -1,6 +1,7 @@
 package com.user_service.client.order;
 
 import com.user_service.client.order.dto.OrderApiResponse;
+import com.user_service.exception.OrderServiceUnavailableException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
@@ -10,6 +11,7 @@ public class OrderApiFallback implements OrderApi{
 
     @Override
     public OrderApiResponse getOrderByUserId(Long userId) {
-        return null;
+        log.error("Fallback activated: getOrderByUserId failed for userId {}", userId);
+        throw new OrderServiceUnavailableException("Order service is unavailable. Cannot retrieve Order for user ID: " + userId);
     }
 }
