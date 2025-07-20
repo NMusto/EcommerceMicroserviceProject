@@ -3,6 +3,8 @@ package com.user_service.service;
 import com.user_service.client.cart.CartApi;
 import com.user_service.client.cart.dto.CartApiRequest;
 import com.user_service.client.cart.dto.CartApiResponse;
+import com.user_service.client.order.OrderApi;
+import com.user_service.client.order.dto.OrderApiResponse;
 import com.user_service.dto.UserRequest;
 import com.user_service.dto.UserResponse;
 import com.user_service.dto.UserUpdateRequest;
@@ -23,6 +25,7 @@ public class UserServiceImpl implements UserService{
     private final UserRepository userRepository;
     private final UserMapper userMapper;
     private final CartApi cartApi;
+    private final OrderApi orderApi;
 
 
     @Override
@@ -41,6 +44,11 @@ public class UserServiceImpl implements UserService{
     @Override
     public CartApiResponse getCartByUserId(Long userId) {
         return cartApi.getCartByUserId(userId);
+    }
+
+    @Override
+    public OrderApiResponse getOrderByUserId(Long userId) {
+        return orderApi.getOrderByUserId(userId);
     }
 
     @Override
