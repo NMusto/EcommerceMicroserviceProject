@@ -2,15 +2,16 @@ package com.user_service.controller;
 
 import com.user_service.client.cart.dto.CartApiResponse;
 import com.user_service.client.order.dto.OrderApiResponse;
+import com.user_service.dto.UserRequest;
 import com.user_service.dto.UserResponse;
+import com.user_service.dto.UserUpdateRequest;
+import com.user_service.entity.User;
 import com.user_service.service.UserService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -29,8 +30,8 @@ public class UserController {
 
     @GetMapping("/{userId}")
     public ResponseEntity<UserResponse> getUserById(@PathVariable Long userId) {
-        UserResponse userResponse = userService.getUserById(userId);
-        return ResponseEntity.status(HttpStatus.OK).body(userResponse);
+        UserResponse user = userService.getUserById(userId);
+        return ResponseEntity.status(HttpStatus.OK).body(user);
     }
 
     @GetMapping("/cart/{userId}")
@@ -43,5 +44,24 @@ public class UserController {
     public ResponseEntity<OrderApiResponse> getOrderByUserId(@PathVariable Long userId) {
         OrderApiResponse order = userService.getOrderByUserId(userId);
         return ResponseEntity.status(HttpStatus.OK).body(order);
+    }
+
+    @PostMapping
+    public ResponseEntity<UserResponse> createUser(@Valid @RequestBody UserRequest userRequest) {
+        UserResponse user = userService.createUser(userRequest);
+        return ResponseEntity.status(HttpStatus.CREATED).body(user);
+    }
+
+    @PatchMapping("/{userId}")
+    public ResponseEntity<UserResponse> updateUser(@PathVariable Long userId,
+                                            @RequestBody UserUpdateRequest userUpdateRequest) {
+        UserResponse user = userService.updateUser(userId, userUpdateRequest);
+        return ResponseEntity.status(HttpStatus.OK).body(user);
+    }
+
+    @DeleteMapping("/{userId}")
+    public ResponseEntity<String> deleteUser(@PathVariable Long userId) {
+        String response = userService.deleteUser(userId);
+        return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 }
