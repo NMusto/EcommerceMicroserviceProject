@@ -1,5 +1,7 @@
 package com.user_service.controller;
 
+import com.user_service.client.cart.dto.CartApiResponse;
+import com.user_service.client.order.dto.OrderApiResponse;
 import com.user_service.dto.UserResponse;
 import com.user_service.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -29,5 +31,17 @@ public class UserController {
     public ResponseEntity<UserResponse> getUserById(@PathVariable Long userId) {
         UserResponse userResponse = userService.getUserById(userId);
         return ResponseEntity.status(HttpStatus.OK).body(userResponse);
+    }
+
+    @GetMapping("/cart/{userId}")
+    public ResponseEntity<CartApiResponse> getCartByUserId(@PathVariable Long userId) {
+        CartApiResponse cart = userService.getCartByUserId(userId);
+        return ResponseEntity.status(HttpStatus.OK).body(cart);
+    }
+
+    @GetMapping("/order/{userId}")
+    public ResponseEntity<OrderApiResponse> getOrderByUserId(@PathVariable Long userId) {
+        OrderApiResponse order = userService.getOrderByUserId(userId);
+        return ResponseEntity.status(HttpStatus.OK).body(order);
     }
 }
