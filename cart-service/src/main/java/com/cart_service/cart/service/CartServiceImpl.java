@@ -94,6 +94,7 @@ public class CartServiceImpl implements CartService {
     }
 
     @Override
+    @Transactional
     public String deleteCartByUserId(Long userId) {
         cartRepository.deleteByUserId(userId);
         return "Cart with user ID " + userId + " was successfully deleted";
