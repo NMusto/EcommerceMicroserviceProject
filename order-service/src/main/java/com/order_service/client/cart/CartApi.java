@@ -1,6 +1,6 @@
-package com.order_service.client;
+package com.order_service.client.cart;
 
-import com.order_service.client.dto.CartApiResponse;
+import com.order_service.client.cart.dto.CartApiResponse;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;

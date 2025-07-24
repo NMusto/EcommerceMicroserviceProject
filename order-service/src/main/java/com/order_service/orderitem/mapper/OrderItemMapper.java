@@ -1,7 +1,6 @@
 package com.order_service.orderitem.mapper;
 
-import com.order_service.client.dto.CartItemApiResponse;
-import com.order_service.orderitem.dto.OrderItemResponse;
+import com.order_service.client.cart.dto.CartItemApiResponse;
 import com.order_service.orderitem.entity.OrderItem;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;

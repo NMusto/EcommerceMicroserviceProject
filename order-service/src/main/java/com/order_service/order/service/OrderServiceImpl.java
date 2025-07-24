@@ -1,7 +1,10 @@
 package com.order_service.order.service;
 
-import com.order_service.client.CartApi;
-import com.order_service.client.dto.CartApiResponse;
+import com.order_service.client.cart.CartApi;
+import com.order_service.client.cart.dto.CartApiResponse;
+import com.order_service.client.cart.dto.CartItemApiResponse;
+import com.order_service.client.product.ProductApi;
+import com.order_service.client.product.dto.ProductApiStockRequest;
 import com.order_service.exception.OrderNotFoundException;
 import com.order_service.order.dto.OrderRequest;
 import com.order_service.order.dto.OrderResponse;
@@ -16,6 +19,7 @@ import com.order_service.orderitem.mapper.OrderItemMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -29,6 +33,7 @@ public class OrderServiceImpl implements OrderService{
     private final OrderRepository orderRepository;
     private final OrderMapper orderMapper;
     private final CartApi cartApi;
+    private final ProductApi productApi;
     private final OrderItemMapper orderItemMapper;
 
 
@@ -52,12 +57,13 @@ public class OrderServiceImpl implements OrderService{
     }
 
     @Override
+    @Transactional
     public OrderResponse createOrder(OrderRequest orderRequest) {
 
         CartApiResponse cart = cartApi.getCartByUserId(orderRequest.getUserId());
+        this.checkStock(cart.getItems());
 
         Order order = orderMapper.toEntity(orderRequest);
-
         order.setCreatedAt(LocalDateTime.now());
         order.setOrderState(OrderState.PENDING);
         order.setUserId(orderRequest.getUserId());
@@ -67,7 +73,6 @@ public class OrderServiceImpl implements OrderService{
                         .map(item -> {
                             OrderItem orderItem = orderItemMapper.toOrderItem(item);
                             orderItem.setOrder(order);
-
                             return orderItem;
                         })
                                 .collect(Collectors.toList());
@@ -121,7 +126,12 @@ public class OrderServiceImpl implements OrderService{
                 .orElseThrow(() -> new OrderNotFoundException("Order not found with ID: " + orderId));
     }
 
-    private void updateStock(String productId, Integer quantity) {
+    private void checkStock(List<CartItemApiResponse> cartItems) {
 
+        List<ProductApiStockRequest> list =  cartItems.stream()
+                .map( item -> new ProductApiStockRequest(item.getProductId(), item.getQuantity()))
+                        .collect(Collectors.toList());
+
+        productApi.checkAndDecreaseStock(list);
     }
 }

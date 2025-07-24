@@ -1,13 +1,13 @@
-package com.order_service.client;
+package com.order_service.client.cart;
 
-import com.order_service.client.dto.CartApiResponse;
+import com.order_service.client.cart.dto.CartApiResponse;
 import com.order_service.exception.CartServiceUnavailableException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 @Component
 @Slf4j
-public class CartApiFallback implements CartApi{
+public class CartApiFallback implements CartApi {
 
     @Override
     public CartApiResponse getCartByUserId(Long userId) {

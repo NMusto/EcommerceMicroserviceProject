@@ -1,4 +1,4 @@
-package com.order_service.client.dto;
+package com.order_service.client.cart.dto;
 
 import lombok.*;
 
