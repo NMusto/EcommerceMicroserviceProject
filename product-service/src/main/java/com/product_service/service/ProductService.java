@@ -14,6 +14,7 @@ public interface ProductService {
     ProductResponse getProductById(String productId);
     ProductResponse createProduct(ProductRequest ProductRequest);
     void checkAndDecreaseStock(List<ProductStockRequest> productList);
+    void increaseStock(List<ProductStockRequest> productList);
     String updateProduct(String productId, ProductUpdateRequest productUpdateRequest);
     String deleteProduct(String productId);
 }

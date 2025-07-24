@@ -47,6 +47,12 @@ public class ProductController {
         return ResponseEntity.ok().build();
     }
 
+    @PostMapping("/increase-stock")
+    public ResponseEntity<Void> increaseStock(@RequestBody List<ProductStockRequest> productList) {
+        productService.increaseStock(productList);
+        return ResponseEntity.ok().build();
+    }
+
     @PatchMapping("/{productId}")
     public ResponseEntity<String> updateProduct(@PathVariable String productId,
                                                        @RequestBody ProductUpdateRequest productUpdateRequest) {

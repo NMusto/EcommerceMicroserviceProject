@@ -104,6 +104,16 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
+    public void increaseStock(List<ProductStockRequest> productList) {
+        for (ProductStockRequest product : productList) {
+            InventoryApiResponse inventory = inventoryApi.getInventoryByProductId(product.getProductId());
+            Integer updatedStock = inventory.getStock() + product.getQuantity();
+
+            this.updateStock(product.getProductId(), updatedStock);
+        }
+    }
+
+    @Override
     //@CachePut(value = "products", key = "#productId")
     public String updateProduct(String productId, ProductUpdateRequest productUpdateRequest) {
 
