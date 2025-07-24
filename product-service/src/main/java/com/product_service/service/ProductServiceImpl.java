@@ -62,7 +62,7 @@ public class ProductServiceImpl implements ProductService {
     public ProductResponse createProduct(ProductRequest productRequest) {
 
         if ( productRepository.existsByNameIgnoreCase(productRequest.getName())) {
-            throw new DuplicateProductNameException("Product with name " + productRequest.getName() + "already exists");
+            throw new DuplicateProductNameException("Product with name " + productRequest.getName() + " already exists");
         }
 
         Product product = productRequestToProduct.map(productRequest);

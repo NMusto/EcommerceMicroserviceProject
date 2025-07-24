@@ -61,28 +61,40 @@ public class OrderServiceImpl implements OrderService{
     public OrderResponse createOrder(OrderRequest orderRequest) {
 
         CartApiResponse cart = cartApi.getCartByUserId(orderRequest.getUserId());
-        this.checkStock(cart.getItems());
+        this.checkAndDecreaseStock(cart.getItems());
 
-        Order order = orderMapper.toEntity(orderRequest);
-        order.setCreatedAt(LocalDateTime.now());
-        order.setOrderState(OrderState.PENDING);
-        order.setUserId(orderRequest.getUserId());
-        order.setTotalAmount(cart.getTotalAmount());
+        try {
+            Order order = orderMapper.toEntity(orderRequest);
+            order.setCreatedAt(LocalDateTime.now());
+            order.setOrderState(OrderState.PENDING);
+            order.setUserId(orderRequest.getUserId());
+            order.setTotalAmount(cart.getTotalAmount());
 
-        List<OrderItem> orderItems = cart.getItems().stream()
-                        .map(item -> {
-                            OrderItem orderItem = orderItemMapper.toOrderItem(item);
-                            orderItem.setOrder(order);
-                            return orderItem;
-                        })
-                                .collect(Collectors.toList());
+            List<OrderItem> orderItems = cart.getItems().stream()
+                    .map(item -> {
+                        OrderItem orderItem = orderItemMapper.toOrderItem(item);
+                        orderItem.setOrder(order);
+                        return orderItem;
+                    })
+                    .collect(Collectors.toList());
 
-        order.setItems(orderItems);
-        orderRepository.save(order);
+            order.setItems(orderItems);
+            orderRepository.save(order);
 
-        cartApi.clearCart(orderRequest.getUserId());
+            cartApi.clearCart(orderRequest.getUserId());
 
-        return orderMapper.toOrderResponse(order);
+            return orderMapper.toOrderResponse(order);
+        } catch (Exception ex) {
+            log.error("Error occurred while creating the order. Restoring stock...", ex);
+
+            try {
+                this.increaseStock(cart.getItems());
+                log.info("Stock successfully restored");
+            } catch (Exception rollbackEx) {
+                log.error("Failed to restore stock", rollbackEx.getMessage());
+            }
+            throw ex;       //Rethrowing the exception so the global handler can catch it
+        }
     }
 
     @Override
@@ -126,12 +138,19 @@ public class OrderServiceImpl implements OrderService{
                 .orElseThrow(() -> new OrderNotFoundException("Order not found with ID: " + orderId));
     }
 
-    private void checkStock(List<CartItemApiResponse> cartItems) {
-
+    private void checkAndDecreaseStock(List<CartItemApiResponse> cartItems) {
         List<ProductApiStockRequest> list =  cartItems.stream()
                 .map( item -> new ProductApiStockRequest(item.getProductId(), item.getQuantity()))
                         .collect(Collectors.toList());
 
         productApi.checkAndDecreaseStock(list);
+    }
+
+    private void increaseStock(List<CartItemApiResponse> cartItems) {
+        List<ProductApiStockRequest> list =  cartItems.stream()
+                .map( item -> new ProductApiStockRequest(item.getProductId(), item.getQuantity()))
+                .collect(Collectors.toList());
+
+        productApi.increaseStock(list);
     }
 }

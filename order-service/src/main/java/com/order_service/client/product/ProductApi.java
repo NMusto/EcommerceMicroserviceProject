@@ -13,4 +13,7 @@ public interface ProductApi {
 
     @PostMapping("/api/product/check-and-decrease-stock")
     void checkAndDecreaseStock(@RequestBody List<ProductApiStockRequest> productList);
+
+    @PostMapping("/increase-stock")
+    void increaseStock(@RequestBody List<ProductApiStockRequest> productList);
 }

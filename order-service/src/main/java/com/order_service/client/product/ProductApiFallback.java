@@ -18,4 +18,10 @@ public class ProductApiFallback implements ProductApi{
         log.error("Fallback activated: checkAndDecreaseStock failed connection");
         throw new ProductServiceUnavailableException("Product service is unavailable. Cannot check and decrease stock");
     }
+
+    @Override
+    public void increaseStock(List<ProductApiStockRequest> productList) {
+        log.error("Fallback activated: increaseStock failed connection");
+        throw new ProductServiceUnavailableException("Product service is unavailable. Cannot increase stock");
+    }
 }
