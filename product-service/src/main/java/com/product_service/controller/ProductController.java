@@ -2,6 +2,7 @@ package com.product_service.controller;
 
 import com.product_service.dto.ProductRequest;
 import com.product_service.dto.ProductResponse;
+import com.product_service.dto.ProductStockRequest;
 import com.product_service.dto.ProductUpdateRequest;
 import com.product_service.entity.Product;
 import com.product_service.service.ProductService;
@@ -38,6 +39,12 @@ public class ProductController {
     public ResponseEntity<ProductResponse> createProduct(@Valid @RequestBody ProductRequest productRequest) {
         ProductResponse createdProduct = productService.createProduct(productRequest);
         return ResponseEntity.status(HttpStatus.CREATED).body(createdProduct);
+    }
+
+    @PostMapping("/check-and-decrease-stock")
+    public ResponseEntity<Void> checkAndDecreaseStock(@RequestBody List<ProductStockRequest> productList) {
+        productService.checkAndDecreaseStock(productList);
+        return ResponseEntity.ok().build();
     }
 
     @PatchMapping("/{productId}")

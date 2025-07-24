@@ -2,9 +2,11 @@ package com.product_service.service;
 
 import com.product_service.client.dto.InventoryApiResponse;
 import com.product_service.dto.ProductRequest;
+import com.product_service.dto.ProductStockRequest;
 import com.product_service.dto.ProductUpdateRequest;
 import com.product_service.dto.ProductResponse;
 import com.product_service.exception.DuplicateProductNameException;
+import com.product_service.exception.InsufficientStockException;
 import com.product_service.exception.ProductNotFoundException;
 import com.common.models.event.StockEvent;
 import com.common.models.event.ProductDeletedEvent;
@@ -18,8 +20,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -73,6 +74,33 @@ public class ProductServiceImpl implements ProductService {
         productResponse.setStock(productRequest.getStock());
 
         return productResponse;
+    }
+
+    @Override
+    public void checkAndDecreaseStock(List<ProductStockRequest> productList) {
+
+        Map<String, InventoryApiResponse> inventoryMap = new HashMap<>();
+
+        productList.stream().forEach( product -> {
+
+            InventoryApiResponse inventory = inventoryApi.getInventoryByProductId(product.getProductId());
+            inventoryMap.put(product.getProductId(), inventory);
+
+            if (product.getQuantity() > inventory.getStock()) {
+                throw new InsufficientStockException(
+                        "Insufficient stock for product ID " + product.getProductId() +
+                                " (requested: " + product.getQuantity() +
+                                ", available: " + inventory.getStock() + ")"
+                );
+            }
+        });
+
+        for (ProductStockRequest product : productList) {
+
+            InventoryApiResponse inventory = inventoryMap.get(product.getProductId());
+            Integer updatedStock = inventory.getStock() - product.getQuantity();
+            this.updateStock(product.getProductId(), updatedStock);
+        }
     }
 
     @Override
