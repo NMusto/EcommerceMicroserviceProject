@@ -9,7 +9,9 @@ import com.cart_service.cart.repository.CartRepository;
 import com.cart_service.exception.CartNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -44,7 +46,12 @@ public class CartServiceImpl implements CartService {
     @Override
     public CartResponse createCart(CartRequest cartRequest) {
         Cart cart = cartRepository.findByUserId(cartRequest.getUserId())
-                .orElseGet(() -> cartMapper.toEntity(cartRequest));
+                .orElseGet(() -> {
+                    Cart newCart = cartMapper.toEntity(cartRequest);
+                    newCart.setItems(new ArrayList<>());
+                    newCart.setTotalAmount(0.0);
+                    return newCart;
+                });
         cartRepository.save(cart);
 
         return cartMapper.toCartResponse(cart);
@@ -77,12 +84,19 @@ public class CartServiceImpl implements CartService {
 
 
     @Override
+    @Transactional
     public String deleteCart(Long cartId) {
         if (!cartRepository.existsById(cartId)) {
             throw new CartNotFoundException("Cart not found with ID: " + cartId);
         }
         cartRepository.deleteById(cartId);
         return "Cart with ID " + cartId + " was successfully deleted";
+    }
+
+    @Override
+    public String deleteCartByUserId(Long userId) {
+        cartRepository.deleteByUserId(userId);
+        return "Cart with user ID " + userId + " was successfully deleted";
     }
 
     private Cart getCart(Long cartId) {

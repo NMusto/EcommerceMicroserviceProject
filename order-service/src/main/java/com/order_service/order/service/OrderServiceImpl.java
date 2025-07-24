@@ -46,10 +46,9 @@ public class OrderServiceImpl implements OrderService{
     }
 
     @Override
-    public OrderResponse getOrderByUserId(Long userId) {
-        Order order = orderRepository.findByUserId(userId)
-                .orElseThrow(() -> new OrderNotFoundException("User ID: " + userId + " not found!"));
-        return orderMapper.toOrderResponse(order);
+    public List<OrderResponse> getOrdersByUserId(Long userId) {
+        List<Order> orders = orderRepository.findByUserId(userId);
+        return orderMapper.toOrderResponseList(orders);
     }
 
     @Override
@@ -68,6 +67,7 @@ public class OrderServiceImpl implements OrderService{
                         .map(item -> {
                             OrderItem orderItem = orderItemMapper.toOrderItem(item);
                             orderItem.setOrder(order);
+
                             return orderItem;
                         })
                                 .collect(Collectors.toList());
@@ -119,5 +119,9 @@ public class OrderServiceImpl implements OrderService{
     private Order getOrder(Long orderId) {
         return orderRepository.findById(orderId)
                 .orElseThrow(() -> new OrderNotFoundException("Order not found with ID: " + orderId));
+    }
+
+    private void updateStock(String productId, Integer quantity) {
+
     }
 }

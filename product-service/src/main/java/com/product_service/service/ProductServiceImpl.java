@@ -4,6 +4,7 @@ import com.product_service.client.dto.InventoryApiResponse;
 import com.product_service.dto.ProductRequest;
 import com.product_service.dto.ProductUpdateRequest;
 import com.product_service.dto.ProductResponse;
+import com.product_service.exception.DuplicateProductNameException;
 import com.product_service.exception.ProductNotFoundException;
 import com.common.models.event.StockEvent;
 import com.common.models.event.ProductDeletedEvent;
@@ -58,6 +59,10 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public ProductResponse createProduct(ProductRequest productRequest) {
+
+        if ( productRepository.existsByNameIgnoreCase(productRequest.getName())) {
+            throw new DuplicateProductNameException("Product with name " + productRequest.getName() + "already exists");
+        }
 
         Product product = productRequestToProduct.map(productRequest);
         Product savedProduct = productRepository.save(product);

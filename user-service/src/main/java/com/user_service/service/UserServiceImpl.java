@@ -14,6 +14,7 @@ import com.user_service.mapper.UserMapper;
 import com.user_service.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -47,8 +48,8 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public OrderApiResponse getOrderByUserId(Long userId) {
-        return orderApi.getOrderByUserId(userId);
+    public List<OrderApiResponse> getOrdersByUserId(Long userId) {
+        return orderApi.getOrdersByUserId(userId);
     }
 
     @Override
@@ -84,12 +85,13 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
+    @Transactional
     public String deleteUser(Long userId) {
         if ( !userRepository.existsById(userId) ) {
             throw new UserNotFoundException("User not found with ID: " + userId);
         }
-
         userRepository.deleteById(userId);
+        cartApi.deleteCartByUserId(userId);
         return "User with ID " + userId + " was successfully deleted";
     }
 

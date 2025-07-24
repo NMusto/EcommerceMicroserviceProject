@@ -6,10 +6,14 @@ import com.order_service.order.entity.Order;
 import com.order_service.orderitem.mapper.OrderItemMapper;
 import org.mapstruct.Mapper;
 
+import java.util.List;
+
 @Mapper(componentModel = "spring", uses = OrderItemMapper.class)
 public interface OrderMapper {
 
     OrderResponse toOrderResponse(Order order);
 
     Order toEntity(OrderRequest orderRequest);
+
+    List<OrderResponse> toOrderResponseList(List<Order> orders);
 }

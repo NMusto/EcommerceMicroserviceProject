@@ -41,9 +41,9 @@ public class UserController {
     }
 
     @GetMapping("/order/{userId}")
-    public ResponseEntity<OrderApiResponse> getOrderByUserId(@PathVariable Long userId) {
-        OrderApiResponse order = userService.getOrderByUserId(userId);
-        return ResponseEntity.status(HttpStatus.OK).body(order);
+    public ResponseEntity<List<OrderApiResponse>> getOrdersByUserId(@PathVariable Long userId) {
+        List<OrderApiResponse> orders = userService.getOrdersByUserId(userId);
+        return ResponseEntity.status(HttpStatus.OK).body(orders);
     }
 
     @PostMapping

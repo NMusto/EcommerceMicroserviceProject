@@ -20,11 +20,4 @@ public interface CartMapper {
 
     Cart toEntity(CartRequest cartRequest);
 
-    // Include CartRequest as a parameter so that this method is only applied after the toEntity(CartRequest) mapping,
-    // and not to other mappings that return a Cart.
-    @AfterMapping
-    default void afterToEntityMapping(@MappingTarget Cart cart) {
-        cart.setItems(new ArrayList<>());
-        cart.setTotalAmount(0.0);
-    }
 }

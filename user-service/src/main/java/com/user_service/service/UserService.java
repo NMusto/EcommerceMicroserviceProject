@@ -13,7 +13,7 @@ public interface UserService {
     List<UserResponse> getAllUsers();
     UserResponse getUserById(Long userId);
     CartApiResponse getCartByUserId(Long userId);
-    OrderApiResponse getOrderByUserId(Long userId);
+    List<OrderApiResponse> getOrdersByUserId(Long userId);
     UserResponse createUser(UserRequest userRequest);
     UserResponse updateUser(Long userid, UserUpdateRequest userUpdateRequest);
     String deleteUser(Long userId);

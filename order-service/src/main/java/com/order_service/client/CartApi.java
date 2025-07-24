@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 @FeignClient(name = "cart-service", fallback = CartApiFallback.class)
 public interface CartApi {
 
-    @GetMapping("/api/cart/{userId}")
+    @GetMapping("/api/cart/user/{userId}")
     CartApiResponse getCartByUserId(@PathVariable("userId") Long userId);
 
     @DeleteMapping("api/cart/clearitems/{userId}")

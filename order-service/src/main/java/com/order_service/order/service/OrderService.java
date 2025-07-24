@@ -11,7 +11,7 @@ public interface OrderService {
 
     List<OrderResponse> getAllOrders();
     OrderResponse getOrderById(Long orderId);
-    OrderResponse getOrderByUserId(Long userId);
+    List<OrderResponse> getOrdersByUserId(Long userId);
     OrderResponse createOrder(OrderRequest orderRequest);
     OrderResponse updateOrder(Long orderId, OrderUpdateRequest orderUpdateRequest);
     OrderResponse updateOrderState(Long orderId, OrderUpdateState orderUpdateState);
